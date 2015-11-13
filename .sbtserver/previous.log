@@ -1,0 +1,66 @@
+New log file opened at Thu Nov 12 18:54:38 EST 2015 by 11666@AlishaHrsonsMBP.fios-router.home
+jvm 11666@AlishaHrsonsMBP.fios-router.home
+jvm vmName=Java HotSpot(TM) 64-Bit Server VM vmVendor=Oracle Corporation vmVersion=24.60-b09
+jvm specName=Java Virtual Machine Specification specVendor=Oracle Corporation specVersion=1.7
+jvm arguments: [-Xms256m, -Xmx1024m, -XX:PermSize=64m, -XX:MaxPermSize=256m]
+Starting event engine
+Starting sbt command engine
+Command engine arguments=List()
+Command engine baseDirectory=/Users/alishahenderson/hello-play-java
+Waiting for sbt command engine
+Command engine initial remaining commands List(--initialize, onFailure load-failed, boot, server-send-ready-for-request, server-handle-next-server-request)
+> --initialize
+> initialize
+> onFailure load-failed
+> boot
+> reload
+[Loading] Scanning directory /Users/alishahenderson/hello-play-java/project
+[Loading] Found non-root projects 
+[Loading] Done in /Users/alishahenderson/hello-play-java/project, returning: ()
+deducing auto plugins based on known facts Set(Atom(sbt.plugins.CorePlugin)) and clauses Clauses(List(Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.IvyPlugin))), Clause(Atom(sbt.plugins.JUnitXmlReportPlugin),Set(Atom(sbt.plugins.JvmPlugin))), Clause(Atom(sbt.plugins.CorePlugin),Set(Atom(sbt.plugins.IvyPlugin))), Clause(Atom(sbt.plugins.IvyPlugin),Set(Atom(sbt.plugins.JvmPlugin))), Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.JUnitXmlReportPlugin)))))
+  :: deduced result: Matched(sbt.plugins.CorePlugin,sbt.plugins.IvyPlugin,sbt.plugins.JvmPlugin,sbt.plugins.JUnitXmlReportPlugin)
+sorting: ns: List(sbt.plugins.CorePlugin, sbt.plugins.IvyPlugin, sbt.plugins.JvmPlugin, sbt.plugins.JUnitXmlReportPlugin)
+  :: sorting:: found: List(sbt.plugins.CorePlugin) not found List(sbt.plugins.IvyPlugin, sbt.plugins.JvmPlugin, sbt.plugins.JUnitXmlReportPlugin)
+  :: sorting:: found: List(sbt.plugins.CorePlugin, sbt.plugins.IvyPlugin) not found List(sbt.plugins.JvmPlugin, sbt.plugins.JUnitXmlReportPlugin)
+  :: sorting:: found: List(sbt.plugins.CorePlugin, sbt.plugins.IvyPlugin, sbt.plugins.JvmPlugin) not found List(sbt.plugins.JUnitXmlReportPlugin)
+  :: sorting:: found: List(sbt.plugins.CorePlugin, sbt.plugins.IvyPlugin, sbt.plugins.JvmPlugin, sbt.plugins.JUnitXmlReportPlugin) not found List()
+  :: sorted deduced result: List(sbt.plugins.CorePlugin, sbt.plugins.IvyPlugin, sbt.plugins.JvmPlugin, sbt.plugins.JUnitXmlReportPlugin)
+[Loading] Done in /Users/alishahenderson/hello-play-java/project, returning: (hello-play-java-build)
+Loading project definition from /Users/alishahenderson/hello-play-java/project
+Running task... Cancel: sbt.TaskCancellationStrategy$Null$@24ed98d8, check cycles: false
+
+Initial source changes: 
+	removed:Set()
+	added: Set()
+	modified: Set()
+Removed products: Set()
+External API changes: API Changes: Set()
+Modified binary dependencies: Set()
+Initial directly invalidated sources: Set()
+
+Sources indirectly invalidated by:
+	product: Set()
+	binary dep: Set()
+	external source: Set()
+All initially invalidated sources: Set()
+
+Copy resource mappings: 
+	
+[Loading] Scanning directory /Users/alishahenderson/hello-play-java
+/Users/alishahenderson/hello-play-java/build.sbt:16: error: reference to fork is ambiguous;
+it is imported twice in the same scope by
+import play.Project._
+and import Keys._
+fork in run := true
+^
+Type error in expression
+> load-failed
+Failed to load project.
+> server-wait-for-reboot
+Done executing sbt server engine, result Right(Exit(0))
+Closing listening server socket
+Waiting for socket thread
+Waiting for request processor thread
+Waiting for command engine result
+Returning control to sbt launcher with result Exit(0)
+Closing the 11666@AlishaHrsonsMBP.fios-router.home logs at Thu Nov 12 18:55:25 EST 2015, goodbye.
