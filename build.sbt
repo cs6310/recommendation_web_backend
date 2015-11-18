@@ -1,6 +1,6 @@
 import play.Project._
 
-name := """hello-play-java"""
+name := """recommendation-web-backend"""
 
 version := "1.0-SNAPSHOT"
 
