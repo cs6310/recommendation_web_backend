@@ -1,9 +1,9 @@
 package models;
 
-public class Ta extends Person
+public class TA extends Person
 {
   private String permission_type;
-  Ta(int id) {
+  TA(int id) {
     super(id);
   }
 
