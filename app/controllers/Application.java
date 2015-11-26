@@ -15,8 +15,9 @@ import play.data.Form;
 import play.mvc.*;
 
 
+
 public class Application extends Controller {
-    
+	public static Project1Scheduler scheduler = new Project1Scheduler();
     public static Result index() {
         return ok(views.html.index.render());
     }
@@ -31,7 +32,9 @@ public class Application extends Controller {
             flash("error", "Please correct errors below.");
             return badRequest(views.html.studentrequest.render(studentRequestForm));
         }else{
+        	//Project1Scheduler scheduler = new Project1Scheduler();
         	StudentRequest request = studentRequestForm.get();
+        	scheduler.calculateSchedule("/home/ubuntu/Downloads/student_schedule.txt", request);
         	return ok(request.toString());
         }
     } 

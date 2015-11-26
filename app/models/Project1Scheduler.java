@@ -100,7 +100,7 @@ public class Project1Scheduler implements Scheduler {
               if ((!(line.contains("%"))) && (!(line.isEmpty()))) {
                   Student student = new Student(id, line);
                   
-                  if (request.id == id) {
+                  if (request != null && request.id != null && request.id == id) {
                 	  student.setCourses(request.coursesForNextSemester);
                 	  System.out.println("COURSES ***** " + student.getCourses());
                   }

@@ -1,11 +1,9 @@
 package models;
 
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
 import static play.data.validation.Constraints.*;
-public class StudentRequest {
 
+public class StudentRequest {
 	// 1. Student ID
 	@Required
 	public Integer id;
