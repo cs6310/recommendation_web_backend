@@ -4,7 +4,7 @@ package models;
 import java.util.Vector;
 
 public interface Scheduler {
-    public void calculateSchedule(String dataFolder);
+    public void calculateSchedule(String dataFolder, StudentRequest request);
 
     public double getObjectiveValue();
 

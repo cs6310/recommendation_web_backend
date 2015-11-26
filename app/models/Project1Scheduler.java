@@ -82,7 +82,7 @@ public class Project1Scheduler implements Scheduler {
    *  (non-Javadoc)
    * @see Scheduler#calculateSchedule(java.lang.String)
    */
-  public void calculateSchedule(String dataFolder) {
+  public void calculateSchedule(String dataFolder, StudentRequest request) {
 
       // TODO Read the test data from the provided folder
       String line = null;
@@ -99,6 +99,11 @@ public class Project1Scheduler implements Scheduler {
           while ((line = bufferedReader.readLine()) != null) {
               if ((!(line.contains("%"))) && (!(line.isEmpty()))) {
                   Student student = new Student(id, line);
+                  
+                  if (request.id == id) {
+                	  student.setCourses(request.coursesForNextSemester);
+                	  System.out.println("COURSES ***** " + student.getCourses());
+                  }
 
                   students.add(student);
                   id++;
@@ -293,6 +298,7 @@ public class Project1Scheduler implements Scheduler {
 
               // Add constraint.
               model.addConstr(exprClassPreReq, GRB.LESS_EQUAL, exprClass, student.getStudentId() + "-courses-prereq");
+              
           }
 
           // All constraints added.
@@ -302,6 +308,7 @@ public class Project1Scheduler implements Scheduler {
           double objectiveValue = model.get(GRB.DoubleAttr.ObjVal);
 
           System.out.printf("X = %f\n", objectiveValue);
+          
 
           if (DEBUG) {
 

@@ -13,7 +13,7 @@ public class Demo {
     		filePath = args[1];
             Project1Scheduler scheduler = new Project1Scheduler();
 
-            scheduler.calculateSchedule(filePath);
+            // scheduler.calculateSchedule(filePath);
     	} else {
     		System.err.println("Illegal flag " + args[1]);
     		return;

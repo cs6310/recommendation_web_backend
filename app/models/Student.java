@@ -58,6 +58,13 @@ public class Student extends Person
   public int getStudentId() {
       return studentId;
   }
+  
+  public void setCourses(List<Integer> requestedCourses) {
+	  courses.clear();
+	  for (int courseId : requestedCourses) {
+		  courses.add(courseId);
+	  }
+  }
 
   /*
    *  (non-Javadoc)

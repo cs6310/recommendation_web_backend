@@ -1,0 +1,25 @@
+@(myForm: Form[StudentRequest])
+@import helper._
+
+@main {
+	<div class="panel panel-default">
+	  <div class="panel-body">
+		@if(flash.containsKey("error")) {
+			<div class="alert alert-danger" role="alert">
+				@flash.get("error")
+			</div>
+		}
+		@helper.form(action = routes.Application.processStudentForm()) {
+			@helper.inputText(myForm("id"))						
+		    @helper.inputPassword(myForm("password"))
+		    @helper.inputText(myForm("desiredCoursesCount"))
+			@helper.repeat(myForm("coursesForNextSemester"), min = 1) { courseField =>
+			
+			    @helper.inputText(courseField)
+			
+			}
+			<button type="submit" name="submit" id="submit" class="btn btn-primary">Submit Request</button>
+		}
+	  </div>
+	</div>
+}
