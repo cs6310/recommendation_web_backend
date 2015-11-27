@@ -1,7 +1,21 @@
-@(myForm: Form[StudentRequest])
+@(myForm: Form[StudentRequest],
+courseCountOptions: List[String],
+semesterCourses: List[String])
 @import helper._
 
 @main {
+	<script type="text/javascript">
+		$( document ).ready(function() {
+			var col, el;
+			
+			$("input[type=radio]").click(function() {
+			   el = $(this);
+			   col = el.data("col");
+			   $("input[data-col=" + col + "]").prop("checked", false);
+			   el.prop("checked", true);
+			});
+		});
+	</script>
 	<div class="panel panel-default">
 	  <div class="panel-body">
 		@if(flash.containsKey("error")) {
@@ -9,16 +23,88 @@
 				@flash.get("error")
 			</div>
 		}
+		<br />
+		@if(myForm.hasGlobalErrors()) {
+			<div class="alert alert-danger" role="alert">
+				@myForm.globalError().message()
+			</div>
+		}
 		@helper.form(action = routes.Application.processStudentForm()) {
+
+	        <fieldset>
+	           <legend><h1>Request Semester Courses</h1></legend>
+	
+				<div class="form-group">
+		            @inputText(myForm("id"),
+		                        '_label -> "Id",
+		                        'class -> "form-control",
+		                        '_help -> "Please enter your student id.")
+	            </div>
+	
+				<div class="form-group">
+	            	@inputPassword(myForm("password"),
+	                            '_label -> "Password",
+	                            'class -> "form-control",
+	                            '_help -> "Please enter your student password.")
+	            </div>
+	            <!--
+				<div class="form-group">
+	            	@inputText(myForm("desiredCoursesCount"),
+	                            '_label -> "Number of Classes You Wish To Take This Semester",
+	                            'class -> "form-control",
+	                            '_help -> "Please enter the number of courses you wish to take for the semester.")
+	            </div>
+	            -->
+				<div class="form-group">
+					 @select(
+					     myForm("desiredCoursesCount"),
+					     options = options(courseCountOptions),
+					     '_label -> "Number of Classes You Wish To Take This Semester",
+					     '_help -> "Please select the number of courses you wish to take for the semester.",
+					     '_showConstraints -> false
+					 )
+	            </div>
+	           	<table class="table table-bordered">
+	           		<tr>
+		           		<th>Course</th>
+		           		@for(priority <- 1 to semesterCourses.length) {
+		           		<th>@priority</th>
+		           		}
+	           		</tr>
+
+				   @for((course, index) <- semesterCourses.zipWithIndex) {
+						<tr>
+							<td>@course</td>
+						    @for(priority <- 1 to semesterCourses.length) {
+						    	<td><input type="radio" name="prioritiesForCoursesForSemester[@index]" data-col="@priority" value="@priority"></td>
+						    }
+						</tr>
+						<!--
+				       <input type="checkbox" name="semesterCourses[@index]" value="@course">@course
+				       @for(priority <- 1 to semesterCourses.length) {
+				       		@priority &nbsp;
+				       }
+				       <br />
+				       -->
+				   }
+				</table>
+	        </fieldset>
+	
+	        <div class="form-group">
+	            <input type="submit" class="btn btn-primary" value="Submit Request">
+	            <a href="@routes.Application.showStudentForm" class="btn">Cancel</a>
+	        </div>
+	        <!--
 			@helper.inputText(myForm("id"))						
 		    @helper.inputPassword(myForm("password"))
 		    @helper.inputText(myForm("desiredCoursesCount"))
-			@helper.repeat(myForm("coursesForNextSemester"), min = 1) { courseField =>
+			@helper.repeat(myForm("prioritiesForCoursesForSemester"), min = 1) { courseField =>
 			
 			    @helper.inputText(courseField)
 			
 			}
 			<button type="submit" name="submit" id="submit" class="btn btn-primary">Submit Request</button>
+			-->
 		}
 	  </div>
 	</div>

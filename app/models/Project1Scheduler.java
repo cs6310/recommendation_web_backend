@@ -41,7 +41,7 @@ public class Project1Scheduler implements Scheduler {
    * @param semesterId is the semester id
    * @return returns a list of classes represented by their class ids.
    */
-  private List<Integer> getClassesForSemester(int semesterId) {
+  public List<Integer> getClassesForSemester(int semesterId) {
       if ((semesterId == 1) || (semesterId == 4) || (semesterId == 7) || (semesterId == 10)) {
           return FALL_COURSES;
       } else if ((semesterId == 2) || (semesterId == 5) || (semesterId == 8) || (semesterId == 11)) {
@@ -100,8 +100,8 @@ public class Project1Scheduler implements Scheduler {
               if ((!(line.contains("%"))) && (!(line.isEmpty()))) {
                   Student student = new Student(id, line);
                   
-                  if (request != null && request.id != null && request.id == id) {
-                	  student.setCourses(request.coursesForNextSemester);
+                  if (request != null && request.id != null && request.prioritizedCourses != null && request.id == id) {
+                	  // student.setCourses(request.coursesForNextSemester);
                 	  System.out.println("COURSES ***** " + student.getCourses());
                   }
 
