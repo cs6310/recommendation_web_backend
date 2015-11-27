@@ -1,0 +1,31 @@
+@import helper._
+
+
+@main {
+
+	@helper.form(action = routes.Application.upload(), 'enctype -> "multipart/form-data") {
+	<div class="panel panel-default">
+	<div id="accordion">
+		
+		<h3>Classes w/ Enrollment Limit</h3>
+		<div>
+			<input type="file" name="picture">
+		</div>
+		<h3>Professor Course Assignment</h3>
+		<div>
+			<input type="file" name="picture">
+		</div>
+		<h3>TA Course Assignment</h3>
+		<div>
+			<input type="file" name="picture">    
+		</div>		
+	</div>
+	<br><br>
+	<div class="form-group">
+	    <input type="submit" class="btn btn-primary" value="Submit Request">
+		<a href="@routes.Application.showAdminForm" class="btn">Cancel</a>
+	</div>	
+	</div>
+	}
+	
+}

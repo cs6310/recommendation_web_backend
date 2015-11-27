@@ -38,7 +38,7 @@ public class StudentRequest {
 		return "id: (" + id +
 				") password: (" + ((password==null) ? "" : password ) +
 				")"+ priorities +
-				" desiredCouresCount: (" + desiredCoursesCount +")";
+				" desiredCoursesCount: (" + desiredCoursesCount +")";
 	}
 	
 	public static List<String> getCourseCountOptions() {

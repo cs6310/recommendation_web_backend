@@ -1,28 +1,23 @@
 package controllers;
 
-import java.io.IOException;
-import java.util.Map;
 import java.util.List;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.File;
 
 import models.Project1Scheduler;
 import models.StudentRequest;
-import play.mvc.Controller;
-import play.mvc.Result;
 import play.data.Form;
-import play.mvc.*;
-import play.data.validation.ValidationError;
+import play.mvc.Controller;
+import play.mvc.Http.MultipartFormData;
+import play.mvc.Http.MultipartFormData.FilePart;
+import play.mvc.Result;
 
 
 
 public class Application extends Controller {
 	public static Project1Scheduler scheduler = new Project1Scheduler();
     public static Result index() {
-        return ok(views.html.index.render());
+        return ok(views.html.index.render(""));
     }
 
     public static Result showStudentForm() {
@@ -40,7 +35,7 @@ public class Application extends Controller {
 
     	if(studentRequestForm.hasErrors()){
         	//for (Map.Entry<String, ValidationError> entry: studentRequestForm.errors())
-        	System.out.println("ERror "+ studentRequestForm.errorsAsJson().toString()); 
+        	System.out.println("Error "+ studentRequestForm.errorsAsJson().toString()); 
             flash("error", "Please correct errors below.");
             return badRequest(views.html.studentrequest.render(studentRequestForm,
             													StudentRequest.getCourseCountOptions(),
@@ -62,4 +57,31 @@ public class Application extends Controller {
 	        }
     	}
     } 
+    
+    public static Result showAdminForm(){
+    	return ok(views.html.adminrequest.render());
+    }
+    
+    public static Result upload() {
+  	  MultipartFormData body = request().body().asMultipartFormData();
+  	  FilePart picture;
+  	  try{
+  		  picture = body.getFile("picture"); 
+  		  if (picture != null) {
+  	    	    String fileName = picture.getFilename();
+  	    	    String contentType = picture.getContentType(); 
+  	    	    File file = picture.getFile();
+  	    	    return ok(views.html.index.render("Files submitted successfully!"));
+  	    	  } 
+  	    	  else {
+  	    	    flash("error", "Missing file");
+  	    	    return ok(views.html.index.render("ERROR: Submission failed!"));    
+  	    	  }
+  		  
+  	  }catch(NullPointerException e){
+  		  System.out.println(e.getMessage());
+  		  return ok(views.html.index.render("Files submitted successfully!"));
+  	  }  	  
+  	}
+    
 }
