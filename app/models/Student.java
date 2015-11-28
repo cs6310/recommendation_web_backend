@@ -17,11 +17,14 @@ public class Student extends Person
     super(id);
   }
 
+  // This returns the permission level for the student
+  // This will be used in determining what people have access to what
+  // actions inside the system.
   public String get_permission() {
 	  return permission_type;
   }
-  
-  
+
+
   //*****************
   //* Project 1 Code
   //*****************
@@ -43,7 +46,7 @@ public class Student extends Person
       }
 
       studentId = id;
-  } 
+  }
 
   /**
    * @return the list of courses the student wants to take.
@@ -58,7 +61,11 @@ public class Student extends Person
   public int getStudentId() {
       return studentId;
   }
-  
+
+  /**
+   * @return nothing
+   * @param requestedCourses (required) The ids of the courses that a student wants to take
+   */
   public void setCourses(List<Integer> requestedCourses) {
 	  courses.clear();
 	  for (int courseId : requestedCourses) {
