@@ -4,14 +4,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+
+import javax.persistence.CascadeType;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+//@Entity
+//@Table(name="Student")
+//@DiscriminatorValue("S") // S for student
+@Entity
+@Table(name="Student")
 public class Student extends Person
 {
+	//@Id
+	//private int id;
   private String permission_type;
   /**
    * The list of individual courses the student wants to take.
    */
-  private List<Integer> courses;
-  private int studentId;
+  //@OneToMany(targetEntity=Course.class, mappedBy="Student", fetch=FetchType.EAGER)
+  @OneToMany(cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+  @JoinColumn(name = "PERSON_ID_REF", referencedColumnName = "PERSON_ID")
+  private List<Course> courses;
 
   Student(int id) {
     super(id);
@@ -37,40 +55,40 @@ public class Student extends Person
 	  super(id);
       Scanner read = new Scanner(line);
 
-      courses = new ArrayList<Integer>();
+      courses = new ArrayList<Course>();
 
       while (read.hasNext()) {
-          int course = (int) read.nextFloat();
+          int courseId = (int) read.nextFloat();
 
-          courses.add(course);
+          courses.add(new Course(courseId));
       }
-
-      studentId = id;
-  }
+  } 
 
   /**
    * @return the list of courses the student wants to take.
    */
-  public List<Integer> getCourses() {
+  public List<Course> getCourses() {
       return courses;
-  }
-
-  /**
-   * @return the student id
-   */
-  public int getStudentId() {
-      return studentId;
   }
 
   /**
    * @return nothing
    * @param requestedCourses (required) The ids of the courses that a student wants to take
    */
-  public void setCourses(List<Integer> requestedCourses) {
+  public void setCourses(List<Course> requestedCourses) {
 	  courses.clear();
-	  for (int courseId : requestedCourses) {
-		  courses.add(courseId);
+	  for (Course course : requestedCourses) {
+		  courses.add(course);
 	  }
+  }
+  
+  public boolean findStudentCourseById(int courseId) {
+	  for (Course course : courses) {
+		  if (course.getId() == courseId) {
+			  return true;
+		  }
+	  }
+	  return false;
   }
 
   /*
@@ -78,6 +96,6 @@ public class Student extends Person
    * @see java.lang.Object#toString()
    */
   public String toString() {
-      return studentId + "---" + courses.toString();
+      return super.get_UID() + "---" + courses.toString();
   }
 }

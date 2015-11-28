@@ -1,13 +1,25 @@
 package models;
 
+
+
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.Entity;
+import javax.persistence.InheritanceType;
+
 /* The Person class is an abstract class that was designed to be inherited from
-  * by all of the different types of people in our system. The basic logic about
-  * a person is contained in this class.
+ * by all of the different types of people in our system. The basic logic about
+ * a person is contained in this class.
 */
-public class Person
+@Entity
+@Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
+public abstract class Person
 {
   private String first_name;
   private String last_name;
+  @Id
+  @Column(name="PERSON_ID")
   private int UID;
   private String username;
 
