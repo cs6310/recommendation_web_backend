@@ -1,6 +1,6 @@
 package models;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -11,7 +11,7 @@ import javax.persistence.Table;
 public class Course
 {
   //private Set<CourseSemester> course_semesters;
-  private String course_ta;
+  //private List<TA> courseTAs;
   @Id
   private int id;
 
@@ -29,14 +29,15 @@ public class Course
 	  course_semesters.add(course_semester);
   }
   */
-  
-  public void set_course_ta(String TA) {
-	  this.course_ta = TA;
+  /*
+  public void set_course_ta(List<TA> Ta) {
+	  this.courseTAs = ta;
   }
   
-  public String get_course_ta() {
-	  return course_ta;
+  public List<TA> get_course_ta() {
+	  return courseTAs;
   }
+  */
   public int getId() {
 	  return id;
   }
