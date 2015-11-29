@@ -60,7 +60,7 @@ public class Student extends Person
       while (read.hasNext()) {
           int courseId = (int) read.nextFloat();
 
-          courses.add(new Course(courseId));
+          courses.add(new Course(courseId, ""));
       }
   } 
 

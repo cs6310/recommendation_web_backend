@@ -1,3 +1,7 @@
+import helpers.CourseLoader;
+
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -6,6 +10,7 @@ import models.Course;
 import play.Application;
 import play.GlobalSettings;
 import play.Logger;
+import play.Play;
 import play.db.jpa.JPA;
 
 import services.*;
@@ -29,17 +34,22 @@ public class Global extends GlobalSettings {
 	}
 	static void initializeData() {
 		/*
-		 * Courses
+		 * Load Courses
 		 */
-		// Create the courses.
-		List<Course> courses= Arrays.asList(new Course(0),
-											new Course(1));
-		CourseService courseService = (CourseService) ServicesInstances.COURSE_SERVICE.getService();
-		// Store the courses in the database.
-		for (Course course: courses) {
-			courseService.storeCourse(course);
+		try {
+			CourseLoader.LoadCourses("resources/initial-classes.txt");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		Logger.debug("Number of courses " + courseService.getAllCourses().size());
+		CourseService courseService = (CourseService) ServicesInstances.COURSE_SERVICE.getService();
+		List<Course> courses = new ArrayList<Course>(courseService.getAllCourses());
+		Logger.debug("Number of courses " + courses.size());
+		/*
+		for (Course course: courses) {
+			Logger.debug(course.toString());
+		}
+		*/
 		
 	}
 }
