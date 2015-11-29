@@ -117,8 +117,7 @@ public class AdministratorRequest {
 			System.out.println("Prof-Course Token: " + s);
 		}
         if(arr.length == 3){
-        	int id = Integer.parseInt(arr[0]);
-            int enrollLimit = Integer.parseInt(arr[2]);            
+        	int id = Integer.parseInt(arr[0]);                       
             professorCourse.put(new Course(id, arr[1]), new Professor(id)) ;
         }        
 	}
@@ -155,11 +154,10 @@ public class AdministratorRequest {
 	private void addTACourseInfo(String line, String separator){
 		String[] arr = line.split(";");
 		for(String s: arr){
-			System.out.println("Prof-Course Token: " + s);
+			System.out.println("TA-Course Token: " + s);
 		}
         if(arr.length == 3){
-        	int id = Integer.parseInt(arr[0]);
-            int enrollLimit = Integer.parseInt(arr[2]);            
+        	int id = Integer.parseInt(arr[0]);         
             taCourseAssignment.put(new Course(id, arr[1]), new TA(id));
         }        
 	}
