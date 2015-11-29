@@ -21,10 +21,11 @@ public abstract class Person
   @Id
   @Column(name="PERSON_ID")
   private int UID;
-  private String username;
+  private String password;
 
   Person(int id) {
     this.UID = id;
+    this.password = helpers.Constants.DEFAULT_PASSWORD;
   }
 
   /* getter for a persons first name
@@ -48,11 +49,13 @@ public abstract class Person
 	  return UID;
   }
 
-  /* getter for a persons username
-   * returns an String
-   */
-  public String get_username() {
-	  return username;
+ 
+  public String getPassword() {
+	  return password;
+  }
+  
+  public void setPassword(String newPassword) {
+	  this.password = newPassword;
   }
 
 }

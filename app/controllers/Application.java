@@ -20,8 +20,6 @@ import views.forms.StudentRequest;
 import play.db.jpa.Transactional;
 import play.mvc.Security;
 
-
-
 public class Application extends Controller {
 	
 	public static Project1Scheduler scheduler = new Project1Scheduler();
@@ -125,22 +123,21 @@ public class Application extends Controller {
     	return redirect(routes.Application.login());
     }
     
+    @Transactional
     public static Result authenticate() {
         Form<LoginRequest> loginForm = Form.form(LoginRequest.class).bindFromRequest();
 
-        if (loginForm.hasErrors()) {
+        if (loginForm.hasErrors() || loginForm.hasGlobalErrors()) {
         	return badRequest(views.html.login.render(loginForm));
         }
         LoginRequest login = loginForm.get();
         // Students will have ids [1, 999]
-		if (login.id > 0 && login.id < 1000){
+		if (LoginRequest.isStudentId(login.id)){
 			Logger.info("student");
 			session("id", ""+(login.id)+"");
 			session("type", "student");
 			return redirect(routes.Application.showPreStudentForm());
-		}
-		
-		if (login.id > 1000){
+		} else if (LoginRequest.isAdminId(login.id)){
 			session("id", ""+(login.id)+"");
 			session("type", "administrator");
 			return redirect(routes.Application.showAdminForm());

@@ -1,10 +1,16 @@
 @(myForm: Form[views.forms.LoginRequest])
 @import helper._
+@import helpers.Constants._
 
 @main {
   <div class="jumbotron">
     <h1>Welcome to the<br />Georgia Tech Scheduling System</h1>
     <p>Please login to begin.</p>
+		@if(myForm.hasGlobalErrors()) {
+			<div class="alert alert-danger" role="alert">
+				@myForm.globalError().message()
+			</div>
+		}
 		@helper.form(action = routes.Application.authenticate()) {
 	
 	        <fieldset>
@@ -19,7 +25,7 @@
 	            	@inputPassword(myForm("password"),
 	                            '_label -> "Password",
 	                            'class -> "form-control",
-	                            '_help -> "Please enter your password.")
+	                            '_help -> PASSWORD_HELP)
 	            </div>
 	        </fieldset>
 	        <div class="form-group">
