@@ -1,6 +1,6 @@
-% Format is: Person.UID Course.id Course.courseName
-801. 5001. CS6210.
-802. 5002. CS6250.
-803. 5003. CS6300.
-804. 5004. CS6310.
-805. 5005. CS6505.
+% Format is: Person.UID;Course.id;Course.courseName;
+801;5001;CS6210;
+802;5002;CS6250;
+803;5003;CS6300;
+804;5004;CS6310;
+805;5005;CS6505;

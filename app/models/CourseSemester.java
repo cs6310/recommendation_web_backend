@@ -30,6 +30,13 @@ public class CourseSemester
 		this.course = course;
 		this.semester = semester;
 	}
+	
+	public CourseSemester(boolean offered, Course course, Semester semester, int enrollment_limit){
+		  this.offered = offered;
+		  this.enrollment_limit = enrollment_limit;
+		  this.course = course;
+		  this.semester = semester;
+	}
   
   public boolean get_offered() {
 	  return offered;

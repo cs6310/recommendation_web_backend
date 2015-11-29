@@ -4,8 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import controllers.Application.SemesterNumber;
 import controllers.middleware.MyAuthenticator;
+import models.AdministratorRequest;
 import models.Course;
 import models.CourseSemester;
 import models.Project1Scheduler;
@@ -20,7 +20,6 @@ import play.mvc.Result;
 import play.mvc.Security;
 import services.SemesterService;
 import services.ServicesInstances;
-import services.StudentService;
 import views.forms.LoginRequest;
 import views.forms.StudentRequest;
 
@@ -130,20 +129,21 @@ public class Application extends Controller {
     public static Result processAdminForm() {
 		MultipartFormData body = request().body().asMultipartFormData();
 	  	  List<FilePart> filePartList = new ArrayList<FilePart>();
-	  	  List<String> fileList = new ArrayList<String>();
-	  	  fileList.add("classEnrollment");fileList.add("professorCourse");fileList.add("taCourse");
-	  	  StringBuilder sb = new StringBuilder();
+	  	  List<File> fileList = new ArrayList<File>();
+	  	  AdministratorRequest adReq = null;
+	  	  
+	  	  List<String> fileNamesList = new ArrayList<String>();
+	  	  fileNamesList.add("classEnrollment");fileNamesList.add("professorCourse");fileNamesList.add("taCourse");
+	  	  
 	  	  int fileCounter =3;
 	  	  int TOTAL_FILES = 3;
 	  	  try{
-	  		  for(int i=0; i < fileList.size(); i++){
+	  		  for(int i=0; i < fileNamesList.size(); i++){
 	  			System.out.println("Inside the upload method-> for loop");
-	  			  filePartList.add(body.getFile(fileList.get(i)));
+	  			  filePartList.add(body.getFile(fileNamesList.get(i)));
 	  			if (filePartList.get(i) != null) {
 	  				FilePart filePart = filePartList.get(i);
-	  				String fileName = filePart.getFilename();
-	  	    	    String contentType = filePart.getContentType(); 
-	  	    	    File file = filePart.getFile(); 	    	    
+	  	    	    fileList.add(filePart.getFile());
 	  			}
 	  			else {
 	  				fileCounter--;    	       
@@ -153,12 +153,15 @@ public class Application extends Controller {
 	  			return ok(views.html.adminrequest.render(
 		    	    		"ERROR: Required 3 files. Uploaded " + fileCounter + " files.")); 
 	  		}else{
+	  			//Parse input from all submitted files and convert them in Hashmaps.
+	  			adReq = new AdministratorRequest(fileList);
+	  			adReq.processInput();
 	  			return ok(views.html.adminrequest.render("Files submitted successfully!"));
 	  		}
 	  	  }catch(NullPointerException e){
 	  		  System.out.println(e.getMessage());
 	  		  return ok(views.html.adminrequest.render("Something went wrong. Please Try again."));
-	  	  }  	  
+	  	  }  	    	  
   	}
     
     public static Result login() {
