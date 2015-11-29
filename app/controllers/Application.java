@@ -42,10 +42,12 @@ public class Application extends Controller {
     				));
     }
     
+	@Security.Authenticated(MyAuthenticator.class)
     public static Result showPreStudentForm() {
     	return ok(views.html.prestudentrequest.render(Form.form(SemesterNumber.class)));
     }
 
+	@Security.Authenticated(MyAuthenticator.class)
     public static Result processPreStudentForm() {
     	Form<SemesterNumber> semesterForm = Form.form(SemesterNumber.class).bindFromRequest();
     	SemesterNumber semester = semesterForm.get();
