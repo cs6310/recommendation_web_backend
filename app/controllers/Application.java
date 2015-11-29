@@ -19,18 +19,14 @@ import services.StudentService;
 import views.forms.LoginRequest;
 import views.forms.StudentRequest;
 
-
-
 public class Application extends Controller {
 	
 	public static Project1Scheduler scheduler = new Project1Scheduler();
 //	\@Transactional
 	@Security.Authenticated(MyAuthenticator.class)
     public static Result index() {
-		StudentService studentService = (StudentService) ServicesInstances.STUDENT_SERVICE.getService();
-		Logger.info("number of students " + studentService.getAllStudents().size());
+    	scheduler.calculateSchedule();
         return ok(views.html.index.render(""));
-		//return ok(views.html.prestudentrequest.render());
     }
 
 	@Security.Authenticated(MyAuthenticator.class)
@@ -47,7 +43,6 @@ public class Application extends Controller {
     
     public static Result showPreStudentForm() {
     	return ok(views.html.prestudentrequest.render(Form.form(SemesterNumber.class)));
-    	//return ok(views.html.prestudentrequest.render());
     }
 
     public static Result processPreStudentForm() {
@@ -60,6 +55,7 @@ public class Application extends Controller {
     }
 
 	@Security.Authenticated(MyAuthenticator.class)
+	@Transactional
     public static Result processStudentForm() {
     	Form<StudentRequest> studentRequestForm = Form.form(StudentRequest.class).bindFromRequest();
     	int semester = Integer.parseInt(session("semester"));
@@ -84,7 +80,7 @@ public class Application extends Controller {
 	        }else{
 	        	//Project1Scheduler scheduler = new Project1Scheduler();
 	        	System.out.println(request.toString());
-	        	scheduler.calculateSchedule("/home/ubuntu/Downloads/student_schedule.txt", request);
+	        	scheduler.calculateSchedule();
 	        	return ok(request.toString());
 	        }
     	}
@@ -139,21 +135,21 @@ public class Application extends Controller {
     	return redirect(routes.Application.login());
     }
     
+    @Transactional
     public static Result authenticate() {
         Form<LoginRequest> loginForm = Form.form(LoginRequest.class).bindFromRequest();
 
-        if (loginForm.hasErrors()) {
+        if (loginForm.hasErrors() || loginForm.hasGlobalErrors()) {
         	return badRequest(views.html.login.render(loginForm));
         }
         LoginRequest login = loginForm.get();
-		if (login.id < 1000){
+        // Students will have ids [1, 999]
+		if (LoginRequest.isStudentId(login.id)){
 			Logger.info("student");
 			session("id", ""+(login.id)+"");
 			session("type", "student");
 			return redirect(routes.Application.showPreStudentForm());
-		}
-		
-		if (login.id > 1000){
+		} else if (LoginRequest.isAdminId(login.id)){
 			session("id", ""+(login.id)+"");
 			session("type", "administrator");
 			return redirect(routes.Application.showAdminForm());

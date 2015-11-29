@@ -36,7 +36,7 @@ public class StudentRequest {
 	}
 	
 	public static List<String> getCourseCountOptions() {
-        List<String> tmp = new ArrayList();
+        List<String> tmp = new ArrayList<String>();
         tmp.add("1");
         tmp.add("2");
         return tmp;
@@ -46,7 +46,7 @@ public class StudentRequest {
 		Project1Scheduler scheduler = new Project1Scheduler();
 		List<Integer> courseIds = scheduler.getClassesForSemester(semesterId);
 		Collections.sort(courseIds);
-		List<String> coursesString = new ArrayList();
+		List<String> coursesString = new ArrayList<String>();
 		for (Integer courseId: courseIds) {
 			coursesString.add(courseId.toString());
 		}
