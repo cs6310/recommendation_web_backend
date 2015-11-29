@@ -1,19 +1,15 @@
-package models;
+package views.forms;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
+
+import models.Project1Scheduler;
 import static play.data.validation.Constraints.*;
 
 public class StudentRequest {
-	// 1. Student ID
-	@Required
-	public Integer id;
-	// 2. Password
-	@Required
-	public String password;
-	// 3. The number of desired courses
+	// The number of desired courses
 	@Required
 	public Integer desiredCoursesCount;
 	// @Required
@@ -35,9 +31,7 @@ public class StudentRequest {
 			}
 		}
 		
-		return "id: (" + id +
-				") password: (" + ((password==null) ? "" : password ) +
-				")"+ priorities +
+		return priorities +
 				" desiredCoursesCount: (" + desiredCoursesCount +")";
 	}
 	

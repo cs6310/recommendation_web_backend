@@ -4,8 +4,9 @@ import java.util.List;
 
 import java.io.File;
 
+import controllers.middleware.MyAuthenticator;
+
 import models.Project1Scheduler;
-import models.StudentRequest;
 import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
@@ -14,19 +15,24 @@ import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
 import services.ServicesInstances;
 import services.StudentService;
+import views.forms.LoginRequest;
+import views.forms.StudentRequest;
 import play.db.jpa.Transactional;
+import play.mvc.Security;
 
 
 
 public class Application extends Controller {
 	public static Project1Scheduler scheduler = new Project1Scheduler();
 	@Transactional
+	@Security.Authenticated(MyAuthenticator.class)
     public static Result index() {
 		StudentService studentService = (StudentService) ServicesInstances.STUDENT_SERVICE.getService();
 		Logger.info("number of students " + studentService.getAllStudents().size());
         return ok(views.html.index.render(""));
     }
 
+	@Security.Authenticated(MyAuthenticator.class)
     public static Result showStudentForm() {
     	return ok(views.html.studentrequest.render(
     				Form.form(StudentRequest.class).fill(new StudentRequest()),
@@ -35,6 +41,7 @@ public class Application extends Controller {
     				));
     }
 
+	@Security.Authenticated(MyAuthenticator.class)
     public static Result processStudentForm() {
     	Form<StudentRequest> studentRequestForm = Form.form(StudentRequest.class).bindFromRequest();
 
@@ -65,10 +72,12 @@ public class Application extends Controller {
     	}
     } 
     
+	@Security.Authenticated(MyAuthenticator.class)
     public static Result showAdminForm(){
     	return ok(views.html.adminrequest.render());
     }
     
+	@Security.Authenticated(MyAuthenticator.class)
     public static Result upload() {
   	  MultipartFormData body = request().body().asMultipartFormData();
   	  FilePart picture;
@@ -92,33 +101,33 @@ public class Application extends Controller {
   	}
     
     public static Result login() {
-    	return ok(views.html.login.render(Form.form(Login.class)));
+    	return ok(views.html.login.render(Form.form(LoginRequest.class)));
+    }
+    public static Result logout() {
+    	session().clear();
+    	return redirect(routes.Application.login());
     }
     
     public static Result authenticate() {
-        Form<Login> loginForm = Form.form(Login.class).bindFromRequest();
-        Logger.info("student2" + loginForm.globalError());
+        Form<LoginRequest> loginForm = Form.form(LoginRequest.class).bindFromRequest();
+
         if (loginForm.hasErrors()) {
         	return badRequest(views.html.login.render(loginForm));
         }
-        Login login = loginForm.get();
+        LoginRequest login = loginForm.get();
 		if (login.id < 1000){
 			Logger.info("student");
-			return redirect("/student");
+			session("id", ""+(login.id)+"");
+			session("type", "student");
+			return redirect(routes.Application.showStudentForm());
 		}
 		
 		if (login.id > 1000){
-			return redirect("/administrator");
+			session("id", ""+(login.id)+"");
+			session("type", "administrator");
+			return redirect(routes.Application.showAdminForm());
 		}
         return notFound("not found");
     }
-    
-    public static class Login {
-    	public int id;
-    	public String password;
-    	
-    }
-    
-    
     
 }

@@ -3,6 +3,8 @@ package models;
 
 import java.util.Vector;
 
+import views.forms.StudentRequest;
+
 public interface Scheduler {
     public void calculateSchedule(String dataFolder, StudentRequest request);
 

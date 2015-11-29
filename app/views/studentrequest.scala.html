@@ -1,4 +1,4 @@
-@(myForm: Form[StudentRequest],
+@(myForm: Form[views.forms.StudentRequest],
 courseCountOptions: List[String],
 semesterCourses: List[String])
 @import helper._
@@ -33,29 +33,6 @@ semesterCourses: List[String])
 
 	        <fieldset>
 	           <legend><h1>Request Semester Courses</h1></legend>
-				<!--
-				<div class="form-group">
-		            @inputText(myForm("id"),
-		                        '_label -> "Id",
-		                        'class -> "form-control",
-		                        '_help -> "Please enter your student id.")
-	            </div>
-	
-				<div class="form-group">
-	            	@inputPassword(myForm("password"),
-	                            '_label -> "Password",
-	                            'class -> "form-control",
-	                            '_help -> "Please enter your student password.")
-	            </div>
-	            -->
-	            <!--
-				<div class="form-group">
-	            	@inputText(myForm("desiredCoursesCount"),
-	                            '_label -> "Number of Classes You Wish To Take This Semester",
-	                            'class -> "form-control",
-	                            '_help -> "Please enter the number of courses you wish to take for the semester.")
-	            </div>
-	            -->
 				<div class="form-group">
 					 @select(
 					     myForm("desiredCoursesCount"),
@@ -80,13 +57,6 @@ semesterCourses: List[String])
 						    	<td><input type="radio" name="prioritiesForCoursesForSemester[@index]" data-col="@priority" value="@priority"></td>
 						    }
 						</tr>
-						<!--
-				       <input type="checkbox" name="semesterCourses[@index]" value="@course">@course
-				       @for(priority <- 1 to semesterCourses.length) {
-				       		@priority &nbsp;
-				       }
-				       <br />
-				       -->
 				   }
 				</table>
 	        </fieldset>
@@ -95,17 +65,6 @@ semesterCourses: List[String])
 	            <input type="submit" class="btn btn-primary" value="Submit Request">
 	            <a href="@routes.Application.showStudentForm" class="btn">Cancel</a>
 	        </div>
-	        <!--
-			@helper.inputText(myForm("id"))						
-		    @helper.inputPassword(myForm("password"))
-		    @helper.inputText(myForm("desiredCoursesCount"))
-			@helper.repeat(myForm("prioritiesForCoursesForSemester"), min = 1) { courseField =>
-			
-			    @helper.inputText(courseField)
-			
-			}
-			<button type="submit" name="submit" id="submit" class="btn btn-primary">Submit Request</button>
-			-->
 		}
 	  </div>
 	</div>

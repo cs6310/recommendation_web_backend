@@ -14,6 +14,8 @@ import java.io.*;
 
 import java.util.*;
 
+import views.forms.StudentRequest;
+
 public class Project1Scheduler implements Scheduler {
   private static final int        NUMBER_OF_COURSES        = 18;
   private static final int        NUMBER_OF_SEMESTERS      = 12;
@@ -100,10 +102,12 @@ public class Project1Scheduler implements Scheduler {
               if ((!(line.contains("%"))) && (!(line.isEmpty()))) {
                   Student student = new Student(id, line);
                   
+                  /*
                   if (request != null && request.id != null && request.prioritizedCourses != null && request.id == id) {
                 	  // student.setCourses(request.coursesForNextSemester);
                 	  System.out.println("COURSES ***** " + student.getCourses());
                   }
+                  */
 
                   students.add(student);
                   id++;
