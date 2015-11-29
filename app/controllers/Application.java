@@ -6,17 +6,24 @@ import java.io.File;
 
 import models.Project1Scheduler;
 import models.StudentRequest;
+import play.Logger;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
+import services.ServicesInstances;
+import services.StudentService;
+import play.db.jpa.Transactional;
 
 
 
 public class Application extends Controller {
 	public static Project1Scheduler scheduler = new Project1Scheduler();
+	@Transactional
     public static Result index() {
+		StudentService studentService = (StudentService) ServicesInstances.STUDENT_SERVICE.getService();
+		Logger.info("number of students " + studentService.getAllStudents().size());
         return ok(views.html.index.render(""));
     }
 

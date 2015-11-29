@@ -60,16 +60,16 @@ public class Project1Scheduler implements Scheduler {
    */
   private void printSchedule(List<Student> students, HashMap<String, GRBVar> GRBVars) throws GRBException {
       for (Student student : students) {
-          System.out.printf("Student %d\n", student.getStudentId());
+          System.out.printf("Student %d\n", student.get_UID());
 
           for (int semesterId = 1; semesterId <= NUMBER_OF_SEMESTERS; semesterId++) {
               System.out.printf("Semester %d)\t", semesterId);
 
-              for (Integer courseId : student.getCourses()) {
-                  String varId = createUniqueVariableId(student.getStudentId(), courseId, semesterId);
+              for (Course course : student.getCourses()) {
+                  String varId = createUniqueVariableId(student.get_UID(), course.getId(), semesterId);
 
                   if (GRBVars.get(varId).get(GRB.DoubleAttr.X) == 1) {
-                      System.out.printf(" (Course %s) ", courseId);
+                      System.out.printf(" (Course %s) ", course.getId());
                   }
               }
 
@@ -129,7 +129,7 @@ public class Project1Scheduler implements Scheduler {
           for (Student student : students) {
               for (int courseId = 1; courseId <= NUMBER_OF_COURSES; courseId++) {
                   for (int semesterId = 1; semesterId <= NUMBER_OF_SEMESTERS; semesterId++) {
-                      String varId = createUniqueVariableId(student.getStudentId(), courseId, semesterId);
+                      String varId = createUniqueVariableId(student.get_UID(), courseId, semesterId);
 
                       GRBVars.put(varId, model.addVar(0, 1, 0.0, GRB.BINARY, varId));
                   }
@@ -158,13 +158,13 @@ public class Project1Scheduler implements Scheduler {
                   for (int courseId = 1; courseId <= NUMBER_OF_COURSES; courseId++) {
 
                       // Verify the student wants to take the course
-                      if (!student.getCourses().contains(courseId)) {
+                      if (!student.findStudentCourseById(courseId)) {
                           continue;
                       }
 
                       // Verify the class is available for the semester.
                       if (getClassesForSemester(semesterId).contains(courseId)) {
-                          String varId = createUniqueVariableId(student.getStudentId(), courseId, semesterId);
+                          String varId = createUniqueVariableId(student.get_UID(), courseId, semesterId);
 
                           expr.addTerm(1, GRBVars.get(varId));
                       }
@@ -187,11 +187,11 @@ public class Project1Scheduler implements Scheduler {
                       for (Student student : students) {
 
                           // Verify the student wants to take the course
-                          if (!student.getCourses().contains(courseId)) {
+                          if (!student.findStudentCourseById(courseId)) {
                               continue;
                           }
 
-                          String varId = createUniqueVariableId(student.getStudentId(), courseId, semesterId);
+                          String varId = createUniqueVariableId(student.get_UID(), courseId, semesterId);
 
                           expr.addTerm(1, GRBVars.get(varId));
                       }
@@ -210,26 +210,26 @@ public class Project1Scheduler implements Scheduler {
               HashSet<Integer> courseCatalog = new HashSet<Integer>(MASTER_COURSE_CATALOG);
 
               // First look at the courses the student wants to take.
-              for (Integer courseId : student.getCourses()) {
+              for (Course course : student.getCourses()) {
                   expr = new GRBLinExpr();
 
                   for (int semesterId = 1; semesterId <= NUMBER_OF_SEMESTERS; semesterId++) {
 
                       // Verify the class is available for that semester.
-                      if (getClassesForSemester(semesterId).contains(courseId)) {
-                          String varId = createUniqueVariableId(student.getStudentId(), courseId, semesterId);
+                      if (getClassesForSemester(semesterId).contains(course.getId())) {
+                          String varId = createUniqueVariableId(student.get_UID(), course.getId(), semesterId);
 
                           expr.addTerm(1, GRBVars.get(varId));
 
                           // Remove the course from the list of all possible classes.
-                          courseCatalog.remove(courseId);
+                          courseCatalog.remove(course.getId());
                       }
                   }
 
                   // Add constraint
                   model.addConstr(
                       expr, GRB.EQUAL, 1,
-                      new StringBuffer().append(student.getStudentId()).append('-').append(courseId).toString());
+                      new StringBuffer().append(student.get_UID()).append('-').append(course.getId()).toString());
               }
 
               // For courses the student will NOT take from the remaining courseCatalog.
@@ -240,7 +240,7 @@ public class Project1Scheduler implements Scheduler {
 
                       // Verify the class is available for that semester.
                       if (getClassesForSemester(semesterId).contains(courseId)) {
-                          String varId = createUniqueVariableId(student.getStudentId(), courseId, semesterId);
+                          String varId = createUniqueVariableId(student.get_UID(), courseId, semesterId);
 
                           expr.addTerm(0, GRBVars.get(varId));
                       }
@@ -249,7 +249,7 @@ public class Project1Scheduler implements Scheduler {
                   // Add constraint
                   model.addConstr(
                       expr, GRB.EQUAL, 0,
-                      new StringBuffer().append(student.getStudentId()).append('-').append(courseId).toString());
+                      new StringBuffer().append(student.get_UID()).append('-').append(courseId).toString());
               }
           }
 
@@ -263,10 +263,10 @@ public class Project1Scheduler implements Scheduler {
               // Expression for the pre-req course.
               GRBLinExpr exprClassPreReq = new GRBLinExpr();
 
-              for (Integer courseId : student.getCourses()) {
+              for (Course course : student.getCourses()) {
 
                   // Check if courseId has a prereq
-                  if (!PREREQUISITE.containsKey(courseId)) {
+                  if (!PREREQUISITE.containsKey(course.getId())) {
 
                       // if not a class that has a pre-req, skip.
                       continue;
@@ -275,29 +275,29 @@ public class Project1Scheduler implements Scheduler {
                   for (int semesterId = 1; semesterId <= NUMBER_OF_SEMESTERS; semesterId++) {
 
                       // Dont bother adding a term if the class doesnt exist for that semester really.
-                      if (!getClassesForSemester(semesterId).contains(courseId)) {
+                      if (!getClassesForSemester(semesterId).contains(course.getId())) {
                           continue;
                       }
 
-                      String varIdClass = createUniqueVariableId(student.getStudentId(), courseId, semesterId);
+                      String varIdClass = createUniqueVariableId(student.get_UID(), course.getId(), semesterId);
 
                       exprClass.addTerm(semesterId, GRBVars.get(varIdClass));
 
-                      String varIdClassPreReq = createUniqueVariableId(student.getStudentId(),
-                                                    PREREQUISITE.get(courseId), semesterId);
+                      String varIdClassPreReq = createUniqueVariableId(student.get_UID(),
+                                                    PREREQUISITE.get(course.getId()), semesterId);
 
                       exprClassPreReq.addTerm(semesterId, GRBVars.get(varIdClassPreReq));
 
                       // Debug to show the setup of vars between class and pre-req for a given student.
                       if (DEBUG) {
                           System.out.printf("Student %d Class Key %s Pre-Req Class Key %s \n",
-                                            student.getStudentId(), varIdClass, varIdClassPreReq);
+                                            student.get_UID(), varIdClass, varIdClassPreReq);
                       }
                   }
               }
 
               // Add constraint.
-              model.addConstr(exprClassPreReq, GRB.LESS_EQUAL, exprClass, student.getStudentId() + "-courses-prereq");
+              model.addConstr(exprClassPreReq, GRB.LESS_EQUAL, exprClass, student.get_UID() + "-courses-prereq");
               
           }
 
