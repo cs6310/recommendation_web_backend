@@ -1,15 +1,35 @@
 package models;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="CourseSemester")
 public class CourseSemester
 {
-  private boolean offered;
-  private Course course;
-  private Semester semester;
-  private int enrollment_limit;
+	@Id
+	@Column(name="COURSE_SEMESTER_ID")
+	private int id;
+	private boolean offered;
+	@ManyToOne
+	@JoinColumn(name = "course")
+	private Course course;
+	@ManyToOne
+	@JoinColumn(name = "semester")
+	private Semester semester;
+	private int enrollment_limit;
 
-  CourseSemester() {
-   
-  }
+	public CourseSemester() {
+		
+	}
+	public CourseSemester(Course course, Semester semester) {
+		this.course = course;
+		this.semester = semester;
+	}
   
   public boolean get_offered() {
 	  return offered;

@@ -1,20 +1,41 @@
 package models;
 
-import java.util.Set;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
+@Entity
 public class Semester
 {
-  private Set<CourseSemester> course_semesters;
+	@Id
+	private int id;
+	private String semesterName;
 
-  Semester() {
+	public Semester() {}
+	
+	public Semester(int id, String semesterName) {
+		this.id = id;
+		this.semesterName = semesterName;
+	}
 
-  }
+	public int getId() {
+		return id;
+	}
 
-  public Set<CourseSemester> get_course_semesters() {
-	  return course_semesters;
-  }
-  
-  public void add_course_semester(CourseSemester course_semester) {
-	  course_semesters.add(course_semester);
-  }
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getSemesterName() {
+		return semesterName;
+	}
+
+	public void setSemesterName(String semesterName) {
+		this.semesterName = semesterName;
+	}
+	
+	public String toString() {
+		return "id: " + id
+				+ " semesterName: " + semesterName;
+	}
+
 }

@@ -2,7 +2,8 @@ package services;
 
 public enum ServicesInstances {
 	STUDENT_SERVICE(new StudentService()),
-	COURSE_SERVICE(new CourseService());
+	COURSE_SERVICE(new CourseService()),
+	SEMESTER_SERVICE(new SemesterService());
 	
 	private Object service;
 	

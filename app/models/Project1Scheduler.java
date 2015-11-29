@@ -19,8 +19,8 @@ import services.StudentService;
 
 public class Project1Scheduler implements Scheduler {
   private static final int        NUMBER_OF_COURSES        = 18;
-  private static final int        NUMBER_OF_SEMESTERS      = 12;
-  private static final int        MAX_CLASSES_PER_SEMESTER = 2;
+  //private static final int        NUMBER_OF_SEMESTERS      = 12;
+  //private static final int        MAX_CLASSES_PER_SEMESTER = 2;
   private static HashSet<Integer> MASTER_COURSE_CATALOG    = new HashSet<Integer>(Arrays.asList(1, 2, 3, 4, 5, 6, 7,
                                                                  8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18));
   private static List<Integer> SUMMER_COURSES = new ArrayList<Integer>(Arrays.asList(2, 3, 4, 6, 8, 9, 12, 13));
@@ -28,15 +28,7 @@ public class Project1Scheduler implements Scheduler {
                                                     11, 15, 17));
   private static List<Integer> SPRING_COURSES = new ArrayList<Integer>(Arrays.asList(2, 3, 4, 6, 8, 9, 12, 13, 5, 10,
                                                     14, 16, 18));
-  private static Map<Integer, Integer> PREREQUISITE = new HashMap<Integer, Integer>() {
-      private static final long serialVersionUID = 4707672455627292440L;
-      {
-          put(16, 4);
-          put(1, 12);
-          put(13, 9);
-          put(7, 3);
-      }
-  };
+
   private static boolean DEBUG =false;    // Defaults to false
 
   /**
@@ -65,7 +57,7 @@ public class Project1Scheduler implements Scheduler {
       for (Student student : students) {
           System.out.printf("Student %d\n", student.get_UID());
 
-          for (int semesterId = 1; semesterId <= NUMBER_OF_SEMESTERS; semesterId++) {
+          for (int semesterId = 1; semesterId <= helpers.Constants.NUMBER_OF_SEMESTERS; semesterId++) {
               System.out.printf("Semester %d)\t", semesterId);
 
               for (Course course : student.getCourses()) {
@@ -107,7 +99,7 @@ public class Project1Scheduler implements Scheduler {
           // Create the variables which represent all the combinations of student id, course id, and semester id.
           for (Student student : students) {
               for (int courseId = 1; courseId <= NUMBER_OF_COURSES; courseId++) {
-                  for (int semesterId = 1; semesterId <= NUMBER_OF_SEMESTERS; semesterId++) {
+                  for (int semesterId = 1; semesterId <= helpers.Constants.NUMBER_OF_SEMESTERS; semesterId++) {
                       String varId = createUniqueVariableId(student.get_UID(), courseId, semesterId);
 
                       GRBVars.put(varId, model.addVar(0, 1, 0.0, GRB.BINARY, varId));
@@ -130,7 +122,7 @@ public class Project1Scheduler implements Scheduler {
           // Constraints.
           // Page 5. Equation 1.
           // Max number of classes a student can take a semester is MAX_CLASSES_PER_SEMESTER
-          for (int semesterId = 1; semesterId <= NUMBER_OF_SEMESTERS; semesterId++) {
+          for (int semesterId = 1; semesterId <= helpers.Constants.NUMBER_OF_SEMESTERS; semesterId++) {
               for (Student student : students) {
                   expr = new GRBLinExpr();
 
@@ -150,14 +142,14 @@ public class Project1Scheduler implements Scheduler {
                   }
 
                   // Add constraint.
-                  model.addConstr(expr, GRB.LESS_EQUAL, MAX_CLASSES_PER_SEMESTER, "" + semesterId + "");
+                  model.addConstr(expr, GRB.LESS_EQUAL, helpers.Constants.MAX_CLASSES_PER_SEMESTER, "" + semesterId + "");
               }
           }
 
           // Page 6. Equation 1.
           // Max number of students in a class for any given semester is less than or equal to X.
           for (int courseId = 1; courseId <= NUMBER_OF_COURSES; courseId++) {
-              for (int semesterId = 1; semesterId <= NUMBER_OF_SEMESTERS; semesterId++) {
+              for (int semesterId = 1; semesterId <= helpers.Constants.NUMBER_OF_SEMESTERS; semesterId++) {
 
                   // Verify the class is available for the semester.
                   if (getClassesForSemester(semesterId).contains(courseId)) {
@@ -192,7 +184,7 @@ public class Project1Scheduler implements Scheduler {
               for (Course course : student.getCourses()) {
                   expr = new GRBLinExpr();
 
-                  for (int semesterId = 1; semesterId <= NUMBER_OF_SEMESTERS; semesterId++) {
+                  for (int semesterId = 1; semesterId <= helpers.Constants.NUMBER_OF_SEMESTERS; semesterId++) {
 
                       // Verify the class is available for that semester.
                       if (getClassesForSemester(semesterId).contains(course.getId())) {
@@ -215,7 +207,7 @@ public class Project1Scheduler implements Scheduler {
               for (Integer courseId : courseCatalog) {
                   expr = new GRBLinExpr();
 
-                  for (int semesterId = 1; semesterId <= NUMBER_OF_SEMESTERS; semesterId++) {
+                  for (int semesterId = 1; semesterId <= helpers.Constants.NUMBER_OF_SEMESTERS; semesterId++) {
 
                       // Verify the class is available for that semester.
                       if (getClassesForSemester(semesterId).contains(courseId)) {
@@ -245,13 +237,13 @@ public class Project1Scheduler implements Scheduler {
               for (Course course : student.getCourses()) {
 
                   // Check if courseId has a prereq
-                  if (!PREREQUISITE.containsKey(course.getId())) {
+                  if (course.getParentClass() == null) {
 
                       // if not a class that has a pre-req, skip.
                       continue;
                   }
 
-                  for (int semesterId = 1; semesterId <= NUMBER_OF_SEMESTERS; semesterId++) {
+                  for (int semesterId = 1; semesterId <= helpers.Constants.NUMBER_OF_SEMESTERS; semesterId++) {
 
                       // Dont bother adding a term if the class doesnt exist for that semester really.
                       if (!getClassesForSemester(semesterId).contains(course.getId())) {
@@ -263,7 +255,7 @@ public class Project1Scheduler implements Scheduler {
                       exprClass.addTerm(semesterId, GRBVars.get(varIdClass));
 
                       String varIdClassPreReq = createUniqueVariableId(student.get_UID(),
-                                                    PREREQUISITE.get(course.getId()), semesterId);
+                                                    course.getParentClass().getId(), semesterId);
 
                       exprClassPreReq.addTerm(semesterId, GRBVars.get(varIdClassPreReq));
 

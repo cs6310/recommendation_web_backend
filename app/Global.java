@@ -1,4 +1,5 @@
 import helpers.CourseLoader;
+import helpers.SemesterLoader;
 import helpers.StudentLoader;
 
 import java.io.IOException;
@@ -6,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import models.Course;
+import models.Semester;
 import models.Student;
 
 import play.Application;
@@ -65,6 +67,18 @@ public class Global extends GlobalSettings {
 		/*
 		for (Student student: students) {
 			Logger.debug(student.toString());
+		}
+		*/
+		/*
+		 * Load Semesters
+		 */
+		SemesterLoader.LoadSemesters();
+		SemesterService semesterService = (SemesterService) ServicesInstances.SEMESTER_SERVICE.getService();
+		List<Semester> semesters = new ArrayList<Semester>(semesterService.getAllSemesters());
+		Logger.debug("Number of semesters " + semesters.size());
+		/*
+		for (Semester semester: semesters) {
+			Logger.debug(semester.toString());
 		}
 		*/
 

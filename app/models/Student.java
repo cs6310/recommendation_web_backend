@@ -1,5 +1,6 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -30,6 +31,9 @@ public class Student extends Person {
 	  return permission_type;
   }
 
+  @ManyToMany(cascade = CascadeType.ALL , fetch = FetchType.EAGER)
+  @JoinColumn(name = "PERSON_ID_REF", referencedColumnName = "PERSON_ID")
+  private List<CourseSemester> course_semester; 
 
 
   public Student() {
@@ -72,7 +76,13 @@ public class Student extends Person {
 	  }
 	  return false;
   }
-
+  public void setCourseSemesters(List<CourseSemester> courseSemesters) {
+	  course_semester = new ArrayList<CourseSemester>(courseSemesters);
+  }
+  public List<CourseSemester> getCourseSemesters() {
+	  return course_semester;
+  }
+  
   /*
    *  (non-Javadoc)
    * @see java.lang.Object#toString()
