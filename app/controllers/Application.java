@@ -23,7 +23,6 @@ import play.mvc.Security;
 
 
 public class Application extends Controller {
-	private static int SEMESTER;
 	
 	public static Project1Scheduler scheduler = new Project1Scheduler();
 	@Transactional
@@ -37,10 +36,13 @@ public class Application extends Controller {
 
 	@Security.Authenticated(MyAuthenticator.class)
     public static Result showStudentForm() {
+    	int semester = Integer.parseInt(session("semester"));
+    	Logger.info("Semester " + semester);
+    	
     	return ok(views.html.studentrequest.render(
     				Form.form(StudentRequest.class).fill(new StudentRequest()),
     				StudentRequest.getCourseCountOptions(),
-    				StudentRequest.getCoursesForSemester(1)
+    				StudentRequest.getCoursesForSemester(semester)
     				));
     }
     
@@ -52,9 +54,8 @@ public class Application extends Controller {
     public static Result processPreStudentForm() {
     	Form<SemesterNumber> semesterForm = Form.form(SemesterNumber.class).bindFromRequest();
     	SemesterNumber semester = semesterForm.get();
-    	Logger.info("Semester id" + semester.id);
     	if (semester.id > 0) {
-    		SEMESTER = semester.id;
+    		session("semester",""+(semester.id)+"");
     	}
 		return redirect(routes.Application.showStudentForm());
     }
@@ -62,8 +63,8 @@ public class Application extends Controller {
 	@Security.Authenticated(MyAuthenticator.class)
     public static Result processStudentForm() {
     	Form<StudentRequest> studentRequestForm = Form.form(StudentRequest.class).bindFromRequest();
-    	Logger.info("Semester " + SEMESTER);
-    	List<String> coursesForSemester = StudentRequest.getCoursesForSemester(SEMESTER);
+    	int semester = Integer.parseInt(session("semester"));
+    	List<String> coursesForSemester = StudentRequest.getCoursesForSemester(semester);
 
     	if(studentRequestForm.hasErrors()){
         	//for (Map.Entry<String, ValidationError> entry: studentRequestForm.errors())
