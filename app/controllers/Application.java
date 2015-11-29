@@ -87,35 +87,9 @@ public class Application extends Controller {
 	        	//Project1Scheduler scheduler = new Project1Scheduler();
 	        	System.out.println(request.toString());
 	        	scheduler.calculateSchedule();
-	        	//TODO create get courses for student
-	        	Course cs1 = new Course(1,"Course 1");
+	        	List<CourseSemester> cs = scheduler.getCourseSemestersforStudent(Integer.parseInt(session("id")));
 
-	            Course cs2 = new Course(2,"Course 2");
-
-	            Course cs3 = new Course(2,"Course 3");
-	            int semesterInt = Integer.parseInt(session("semester"));
-	            List<CourseSemester> csList = new ArrayList<CourseSemester>();
-	            SemesterService semesterService = (SemesterService) ServicesInstances.SEMESTER_SERVICE.getService();
-	            if (semesterService != null ) {
-	            	Semester Semester = semesterService.getById(semesterInt);
-	            	Semester sm2 = semesterService.getById(2);
-	                CourseSemester coursesemester1 = new CourseSemester(cs1,Semester);
-
-	                CourseSemester coursesemester2 = new CourseSemester(cs2,Semester);
-
-	                CourseSemester coursesemester3 = new CourseSemester(cs3,sm2);
-
-	                csList.add(coursesemester1);
-
-	                csList.add(coursesemester2);
-
-	                csList.add(coursesemester3);
-
-	                  	
-	            }
-
-	            return ok(views.html.studentrequestoutput.render(csList));
-	        	//return ok(request.toString());
+	            return ok(views.html.studentrequestoutput.render(cs));
 	        }
     	}
     } 

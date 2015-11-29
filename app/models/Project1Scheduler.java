@@ -14,6 +14,7 @@ import java.util.*;
 
 import play.Logger;
 
+import services.SemesterService;
 import services.ServicesInstances;
 import services.StudentService;
 
@@ -280,6 +281,7 @@ public class Project1Scheduler implements Scheduler {
 
           System.out.printf("X = %f\n", objectiveValue);
           
+          GRBVARS_GLOBAL= GRBVars;
 
           if (DEBUG) {
 
@@ -320,5 +322,46 @@ public class Project1Scheduler implements Scheduler {
 
       // TODO: You will need to implement this
       return null;
+  }
+  
+  private HashMap<String, GRBVar> GRBVARS_GLOBAL;
+  public List<CourseSemester> getCourseSemestersforStudent(int studentId) {
+	  List<CourseSemester> coursesForStudentBySemester = new ArrayList<CourseSemester>();
+	  StudentService studentService = (StudentService) ServicesInstances.STUDENT_SERVICE.getService();
+	  List<Student> students = new ArrayList<Student>(studentService.getAllStudents());
+
+	  for (Student student : students) {
+		  // System.out.printf("Student %d\n", student.get_UID());
+		  if (student.get_UID() == studentId) {
+			  for (int semesterId = 1; semesterId <= helpers.Constants.NUMBER_OF_SEMESTERS; semesterId++) {
+				  //System.out.printf("Semester %d)\t", semesterId);
+				  Semester newSemester = new Semester();
+				  SemesterService semesterService = (SemesterService) ServicesInstances.SEMESTER_SERVICE.getService();
+				  if (semesterService != null ) {
+					  newSemester = semesterService.getById(semesterId);
+				  }
+				  for (Course course : student.getCourses()) {
+					  String varId = createUniqueVariableId(student.get_UID(), course.getId(), semesterId);
+
+					  try {
+						if (GRBVARS_GLOBAL.get(varId).get(GRB.DoubleAttr.X) == 1) {
+							  // System.out.printf(" (Course %s) ", course.getId());
+							  CourseSemester courseSemester = new CourseSemester(course,newSemester);
+							  coursesForStudentBySemester.add(courseSemester);
+						  }
+					} catch (GRBException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				  }
+
+				  //System.out.println("");
+			  }
+		  }
+
+
+	  }
+
+	  return coursesForStudentBySemester;
   }
 }
