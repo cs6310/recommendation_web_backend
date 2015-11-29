@@ -1,0 +1,6 @@
+% Format is: Course.id Course.courseName CourseSemester.enrollment_limit
+5001. CS6210. 30.
+5002. CS6250. 40.
+5003. CS6300. 50.
+5004. CS6310. 60.
+5005. CS6505. 70.
