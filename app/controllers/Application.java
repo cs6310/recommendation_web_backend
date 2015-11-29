@@ -91,4 +91,34 @@ public class Application extends Controller {
   	  }  	  
   	}
     
+    public static Result login() {
+    	return ok(views.html.login.render(Form.form(Login.class)));
+    }
+    
+    public static Result authenticate() {
+        Form<Login> loginForm = Form.form(Login.class).bindFromRequest();
+        Logger.info("student2" + loginForm.globalError());
+        if (loginForm.hasErrors()) {
+        	return badRequest(views.html.login.render(loginForm));
+        }
+        Login login = loginForm.get();
+		if (login.id < 1000){
+			Logger.info("student");
+			return redirect("/student");
+		}
+		
+		if (login.id > 1000){
+			return redirect("/administrator");
+		}
+        return notFound("not found");
+    }
+    
+    public static class Login {
+    	public int id;
+    	public String password;
+    	
+    }
+    
+    
+    
 }
