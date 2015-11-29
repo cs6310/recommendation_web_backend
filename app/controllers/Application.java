@@ -22,7 +22,7 @@ import views.forms.StudentRequest;
 public class Application extends Controller {
 	
 	public static Project1Scheduler scheduler = new Project1Scheduler();
-//	\@Transactional
+	@Transactional
 	@Security.Authenticated(MyAuthenticator.class)
     public static Result index() {
     	scheduler.calculateSchedule();
@@ -111,8 +111,7 @@ public class Application extends Controller {
 	  	    	    File file = filePart.getFile(); 	    	    
 	  			}
 	  			else {
-	  				fileCounter--;
-//	  	    	    flash("error", "Missing file: " + fileList.get(i));  	    	       
+	  				fileCounter--;    	       
 	  	    	  }
 	  		  }
 	  		if(fileCounter < TOTAL_FILES){
