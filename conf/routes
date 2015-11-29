@@ -2,15 +2,17 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-GET     /                   controllers.Application.index()
-POST    /                   controllers.Application.authenticate()
-GET		/student			controllers.Application.showStudentForm()
-POST	/student			controllers.Application.processStudentForm()
-GET		/administrator		controllers.Application.showAdminForm()
-POST	/administrator		controllers.Application.upload()
-GET		/login				controllers.Application.login()
-POST	/login				controllers.Application.authenticate()
-GET		/logout				controllers.Application.logout()
+GET     /                   		controllers.Application.index()
+POST    /                   		controllers.Application.authenticate()
+GET		/student/semester			controllers.Application.showPreStudentForm()
+POST	/student/semester			controllers.Application.processPreStudentForm()
+GET		/student/semester/request	controllers.Application.showStudentForm()
+POST	/student/semester/request	controllers.Application.processStudentForm()
+GET		/administrator				controllers.Application.showAdminForm()
+POST	/administrator				controllers.Application.upload()
+GET		/login						controllers.Application.login()
+POST	/login						controllers.Application.authenticate()
+GET		/logout						controllers.Application.logout()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

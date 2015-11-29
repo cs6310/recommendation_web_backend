@@ -23,6 +23,8 @@ import play.mvc.Security;
 
 
 public class Application extends Controller {
+	private static int SEMESTER;
+	
 	public static Project1Scheduler scheduler = new Project1Scheduler();
 	@Transactional
 	@Security.Authenticated(MyAuthenticator.class)
@@ -30,6 +32,7 @@ public class Application extends Controller {
 		StudentService studentService = (StudentService) ServicesInstances.STUDENT_SERVICE.getService();
 		Logger.info("number of students " + studentService.getAllStudents().size());
         return ok(views.html.index.render(""));
+		//return ok(views.html.prestudentrequest.render());
     }
 
 	@Security.Authenticated(MyAuthenticator.class)
@@ -40,12 +43,27 @@ public class Application extends Controller {
     				StudentRequest.getCoursesForSemester(1)
     				));
     }
+    
+    public static Result showPreStudentForm() {
+    	return ok(views.html.prestudentrequest.render(Form.form(SemesterNumber.class)));
+    	//return ok(views.html.prestudentrequest.render());
+    }
+
+    public static Result processPreStudentForm() {
+    	Form<SemesterNumber> semesterForm = Form.form(SemesterNumber.class).bindFromRequest();
+    	SemesterNumber semester = semesterForm.get();
+    	Logger.info("Semester id" + semester.id);
+    	if (semester.id > 0) {
+    		SEMESTER = semester.id;
+    	}
+		return redirect(routes.Application.showStudentForm());
+    }
 
 	@Security.Authenticated(MyAuthenticator.class)
     public static Result processStudentForm() {
     	Form<StudentRequest> studentRequestForm = Form.form(StudentRequest.class).bindFromRequest();
-
-    	List<String> coursesForSemester = StudentRequest.getCoursesForSemester(1);
+    	Logger.info("Semester " + SEMESTER);
+    	List<String> coursesForSemester = StudentRequest.getCoursesForSemester(SEMESTER);
 
     	if(studentRequestForm.hasErrors()){
         	//for (Map.Entry<String, ValidationError> entry: studentRequestForm.errors())
@@ -119,7 +137,7 @@ public class Application extends Controller {
 			Logger.info("student");
 			session("id", ""+(login.id)+"");
 			session("type", "student");
-			return redirect(routes.Application.showStudentForm());
+			return redirect(routes.Application.showPreStudentForm());
 		}
 		
 		if (login.id > 1000){
@@ -129,5 +147,9 @@ public class Application extends Controller {
 		}
         return notFound("not found");
     }
+
     
+    public static class SemesterNumber {
+    	public int id;
+    }
 }
