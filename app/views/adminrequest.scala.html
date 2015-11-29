@@ -1,31 +1,34 @@
+@(message: String)
+
 @import helper._
 
 
 @main {
 
-	@helper.form(action = routes.Application.upload(), 'enctype -> "multipart/form-data") {
-	<div class="panel panel-default">
+	@helper.form(action = routes.Application.processAdminForm(), 'enctype -> "multipart/form-data") {
+	<h2 style="color: red;">@message</h2>
+	<p>@flash.get("error")</p>
 	<div id="accordion">
 		
 		<h3>Classes w/ Enrollment Limit</h3>
 		<div>
-			<input type="file" name="picture">
+			<input type="file" name="classEnrollment">
 		</div>
 		<h3>Professor Course Assignment</h3>
 		<div>
-			<input type="file" name="picture">
+			<input type="file" name="professorCourse">
 		</div>
 		<h3>TA Course Assignment</h3>
 		<div>
-			<input type="file" name="picture">    
+			<input type="file" name="taCourse">    
 		</div>		
 	</div>
 	<br><br>
 	<div class="form-group">
 	    <input type="submit" class="btn btn-primary" value="Submit Request">
-		<a href="@routes.Application.showAdminForm" class="btn">Cancel</a>
+		<a href="@routes.Application.showAdminForm()" class="btn">Cancel</a>
 	</div>	
-	</div>
+	
 	}
 	
 }

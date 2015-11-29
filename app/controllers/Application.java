@@ -1,11 +1,11 @@
 package controllers;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
-import java.io.File;
-
+import controllers.Application.SemesterNumber;
 import controllers.middleware.MyAuthenticator;
-
 import models.Project1Scheduler;
 import play.Logger;
 import play.data.Form;
@@ -13,19 +13,18 @@ import play.mvc.Controller;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
+import play.mvc.Security;
 import services.ServicesInstances;
 import services.StudentService;
 import views.forms.LoginRequest;
 import views.forms.StudentRequest;
-import play.db.jpa.Transactional;
-import play.mvc.Security;
 
 
 
 public class Application extends Controller {
 	
 	public static Project1Scheduler scheduler = new Project1Scheduler();
-	@Transactional
+//	\@Transactional
 	@Security.Authenticated(MyAuthenticator.class)
     public static Result index() {
 		StudentService studentService = (StudentService) ServicesInstances.STUDENT_SERVICE.getService();
@@ -93,30 +92,43 @@ public class Application extends Controller {
     
 	@Security.Authenticated(MyAuthenticator.class)
     public static Result showAdminForm(){
-    	return ok(views.html.adminrequest.render());
+    	return ok(views.html.adminrequest.render(""));
     }
     
 	@Security.Authenticated(MyAuthenticator.class)
-    public static Result upload() {
-  	  MultipartFormData body = request().body().asMultipartFormData();
-  	  FilePart picture;
-  	  try{
-  		  picture = body.getFile("picture"); 
-  		  if (picture != null) {
-  	    	    String fileName = picture.getFilename();
-  	    	    String contentType = picture.getContentType(); 
-  	    	    File file = picture.getFile();
-  	    	    return ok(views.html.index.render("Files submitted successfully!"));
-  	    	  } 
-  	    	  else {
-  	    	    flash("error", "Missing file");
-  	    	    return ok(views.html.index.render("ERROR: Submission failed!"));    
-  	    	  }
-  		  
-  	  }catch(NullPointerException e){
-  		  System.out.println(e.getMessage());
-  		  return ok(views.html.index.render("Files submitted successfully!"));
-  	  }  	  
+    public static Result processAdminForm() {
+		MultipartFormData body = request().body().asMultipartFormData();
+	  	  List<FilePart> filePartList = new ArrayList<FilePart>();
+	  	  List<String> fileList = new ArrayList<String>();
+	  	  fileList.add("classEnrollment");fileList.add("professorCourse");fileList.add("taCourse");
+	  	  StringBuilder sb = new StringBuilder();
+	  	  int fileCounter =3;
+	  	  int TOTAL_FILES = 3;
+	  	  try{
+	  		  for(int i=0; i < fileList.size(); i++){
+	  			System.out.println("Inside the upload method-> for loop");
+	  			  filePartList.add(body.getFile(fileList.get(i)));
+	  			if (filePartList.get(i) != null) {
+	  				FilePart filePart = filePartList.get(i);
+	  				String fileName = filePart.getFilename();
+	  	    	    String contentType = filePart.getContentType(); 
+	  	    	    File file = filePart.getFile(); 	    	    
+	  			}
+	  			else {
+	  				fileCounter--;
+//	  	    	    flash("error", "Missing file: " + fileList.get(i));  	    	       
+	  	    	  }
+	  		  }
+	  		if(fileCounter < TOTAL_FILES){
+	  			return ok(views.html.adminrequest.render(
+		    	    		"ERROR: Required 3 files. Uploaded " + fileCounter + " files.")); 
+	  		}else{
+	  			return ok(views.html.adminrequest.render("Files submitted successfully!"));
+	  		}
+	  	  }catch(NullPointerException e){
+	  		  System.out.println(e.getMessage());
+	  		  return ok(views.html.adminrequest.render("Something went wrong. Please Try again."));
+	  	  }  	  
   	}
     
     public static Result login() {
