@@ -66,6 +66,10 @@ public class Course {
   public List<Course> getChildCourses() {
 	  return childClasses;
   }
+  
+  public String getCourseName() {
+	  return courseName;
+  }
 
   /*
   public Set<CourseSemester> get_course_semesters() {

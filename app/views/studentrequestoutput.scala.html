@@ -1,0 +1,51 @@
+@(courseSemesterOptions: List[CourseSemester])
+@import helper._
+
+@main {
+	<script type="text/javascript">
+		$( document ).ready(function() {
+			var col, el;
+			
+			$("input[type=radio]").click(function() {
+			   el = $(this);
+			   col = el.data("col");
+			   $("input[data-col=" + col + "]").prop("checked", false);
+			   el.prop("checked", true);
+			});
+		});
+	</script>
+	<div class="panel panel-default">
+	  <div class="panel-body">
+		@if(flash.containsKey("error")) {
+			<div class="alert alert-danger" role="alert">
+				@flash.get("error")
+			</div>
+		}
+		<br />
+
+
+	        <fieldset>
+	           <legend><h1>Recommended Semester Courses</h1></legend>
+	           	<table class="table table-bordered">
+	           		<tr>
+		           		<th>Course</th>
+	           		</tr>
+
+				   @for((courseSemester, index) <- courseSemesterOptions.zipWithIndex) {
+				   		@if(courseSemester.get_semester().getId().toString() == session.get("semester")) {
+							<tr>
+								<td>@courseSemester.get_course().getCourseName()</td>
+							</tr>
+						}
+				   }
+				</table>
+	        </fieldset>
+	
+	        <div class="form-group">
+	            <input type="submit" class="btn btn-primary" value="Submit Request">
+	            <a href="@routes.Application.showStudentForm" class="btn">Cancel</a>
+	        </div>
+
+	  </div>
+	</div>
+}
