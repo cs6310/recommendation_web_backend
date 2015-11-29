@@ -10,11 +10,12 @@ import gurobi.GRBVar;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.*;
-
 import java.util.*;
 
-import views.forms.StudentRequest;
+import play.Logger;
+
+import services.ServicesInstances;
+import services.StudentService;
 
 public class Project1Scheduler implements Scheduler {
   private static final int        NUMBER_OF_COURSES        = 18;
@@ -36,7 +37,7 @@ public class Project1Scheduler implements Scheduler {
           put(7, 3);
       }
   };
-  private static boolean DEBUG;    // Defaults to false
+  private static boolean DEBUG =false;    // Defaults to false
 
   /**
    * This method determines the list of classes available depending on the semester.
@@ -84,42 +85,16 @@ public class Project1Scheduler implements Scheduler {
    *  (non-Javadoc)
    * @see Scheduler#calculateSchedule(java.lang.String)
    */
-  public void calculateSchedule(String dataFolder, StudentRequest request) {
+  public void calculateSchedule() {
 
-      // TODO Read the test data from the provided folder
-      String line = null;
-
-      // dataFolder = "/home/ubuntu/Downloads/student_schedule.txt";
-
-      List<Student> students = new ArrayList<Student>();
-
-      try {
-          FileReader     fileReader     = new FileReader(dataFolder);
-          BufferedReader bufferedReader = new BufferedReader(fileReader);
-          int            id             = 1;
-
-          while ((line = bufferedReader.readLine()) != null) {
-              if ((!(line.contains("%"))) && (!(line.isEmpty()))) {
-                  Student student = new Student(id, line);
-                  
-                  /*
-                  if (request != null && request.id != null && request.prioritizedCourses != null && request.id == id) {
-                	  // student.setCourses(request.coursesForNextSemester);
-                	  System.out.println("COURSES ***** " + student.getCourses());
-                  }
-                  */
-
-                  students.add(student);
-                  id++;
-              }
-          }
-
-          bufferedReader.close();
-      } catch (FileNotFoundException ex) {
-          System.out.println("File not found");
-      } catch (IOException ex) {
-          System.out.println("Error reading file");
-      }
+	  // Get the students from the database
+	  StudentService studentService = (StudentService) ServicesInstances.STUDENT_SERVICE.getService();
+	  List<Student> students = new ArrayList<Student>(studentService.getAllStudents());
+	  /*
+		for (Student student: students) {
+			Logger.debug(student.toString() + "/" + student.getCourses().size());
+		}
+		*/
 
       GRBEnv env;
 

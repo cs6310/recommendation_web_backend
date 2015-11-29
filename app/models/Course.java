@@ -11,10 +11,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="Course")
-public class Course
-{
-  //private Set<CourseSemester> course_semesters;
-  //private List<TA> courseTAs;
+public class Course {
   @Id
   private int id;
   private String courseName;
@@ -23,6 +20,8 @@ public class Course
   @OneToMany(mappedBy="parent")
   private List<Course> childClasses; // aka the classes opened after taking the pre-req.
 
+  // Default Constructor needed for hibernate
+  public Course() {  }
   public Course(int id, String courseName) {
 	  this.id = id;
 	  this.courseName = courseName;

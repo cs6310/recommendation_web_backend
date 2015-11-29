@@ -1,16 +1,16 @@
 import helpers.CourseLoader;
+import helpers.StudentLoader;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import models.Course;
+import models.Student;
 
 import play.Application;
 import play.GlobalSettings;
 import play.Logger;
-import play.Play;
 import play.db.jpa.JPA;
 
 import services.*;
@@ -50,6 +50,23 @@ public class Global extends GlobalSettings {
 			Logger.debug(course.toString());
 		}
 		*/
-		
+		/*
+		 * Load Students
+		 */
+		try {
+			StudentLoader.LoadStudent("resources/student_schedule.txt");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		StudentService studentService = (StudentService) ServicesInstances.STUDENT_SERVICE.getService();
+		List<Student> students = new ArrayList<Student>(studentService.getAllStudents());
+		Logger.debug("Number of students " + students.size());
+		/*
+		for (Student student: students) {
+			Logger.debug(student.toString());
+		}
+		*/
+
 	}
 }
