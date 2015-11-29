@@ -9,6 +9,9 @@ import models.Semester;
 import play.db.jpa.JPA;
 
 public class SemesterService {
+	public Semester getById(int id) {
+		return JPA.em().find(Semester.class, id);
+	}
 	public Collection<Semester> getAllSemesters() {
 		EntityManager em = JPA.em();
 		String queryString = "SELECT s from Semester s"; //HSQL syntax
