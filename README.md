@@ -2,6 +2,7 @@
 
 ## Table of Contents
 - [Running](#running)
+- [Using](#using)
 - [Development](#development)
 - [Tech Stack](#tech-stack)
 
@@ -10,10 +11,23 @@
   - For Linux/ Mac OS X: `./activator run`
   - For Windows: `./activator.bat run`
     - First time runs will cause dependencies to download which will take awhile.
-- Navigate to `localhost:9000`
+- Navigate to `localhost:9000/login`
   - It will compile for the first time (will take some time), create database tables, and run.
   - The website will be visible in the browser 
 
+## Using
+### Student
+- Logging in as a Student (All ids are numerical)
+  - Pick an id between 1 and 600, inclusive.
+  - Type the password `12345`
+- Pick a semester.
+- Pick your course preferences for the semester.
+  - Select the number of courses you want.
+  - Prioritize the courses you want. (1 being highest priority)
+  - Submit the Request.
+- On the next page, you view your courses.
+  - View the courses for the semester
+  - View the courses for all the semesters.
 
 ## Development
 ### Working in Eclipse (One-time setup per developer)
