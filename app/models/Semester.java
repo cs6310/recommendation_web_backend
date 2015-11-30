@@ -11,7 +11,12 @@ public class Semester
 	private String semesterName;
 
 	public Semester() {}
-	
+
+		/**
+	   * Constructor
+	   * @param id (required) The id for the semester
+	   * @param semesterName (required) The name of the semester like Fall, Spring, or Summer.
+	   */
 	public Semester(int id, String semesterName) {
 		this.id = id;
 		this.semesterName = semesterName;
@@ -32,7 +37,7 @@ public class Semester
 	public void setSemesterName(String semesterName) {
 		this.semesterName = semesterName;
 	}
-	
+
 	public String toString() {
 		return "id: " + id
 				+ " semesterName: " + semesterName;

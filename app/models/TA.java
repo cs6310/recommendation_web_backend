@@ -5,6 +5,10 @@ public class TA extends Person
 {
   private String permission_type;
 
+  /**
+   * Constructor
+   * @param id (required) The TA id.
+   */
   TA(int id) {
     super(id);
   }

@@ -23,6 +23,10 @@ public abstract class Person
   private int UID;
   private String password;
 
+  /**
+   * Constructor
+   * @param id (required) The Person id.
+   */
   Person(int id) {
     this.UID = id;
     this.password = helpers.Constants.DEFAULT_PASSWORD;
@@ -49,11 +53,11 @@ public abstract class Person
 	  return UID;
   }
 
- 
+
   public String getPassword() {
 	  return password;
   }
-  
+
   public void setPassword(String newPassword) {
 	  this.password = newPassword;
   }
