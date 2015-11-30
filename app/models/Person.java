@@ -33,31 +33,38 @@ public abstract class Person
   }
 
   /* getter for a persons first name
-   * returns a string
+   * @return a string for the first name
    */
   public String get_first_name() {
 	  return first_name;
   }
 
   /* getter for a persons last name
-   * returns a string
+   * @return a string for the last name
    */
   public String get_last_name() {
 	  return last_name;
   }
 
   /* getter for a persons unique ID number
-   * returns an int
+   * @return an int for the ID
    */
   public int get_UID() {
 	  return UID;
   }
 
 
+  /* getter for a persons password
+   * @return a string for checking the password
+   */
   public String getPassword() {
 	  return password;
   }
 
+  /* setter for a persons password
+   * @param newPassword (required) a new Password for the user
+   * @return nothing
+   */
   public void setPassword(String newPassword) {
 	  this.password = newPassword;
   }
