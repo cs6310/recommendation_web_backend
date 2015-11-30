@@ -31,9 +31,9 @@ public class AdministratorRequest {
 	
 	public AdministratorRequest(List<File> fileList){
 		inputFileList = fileList;
-		classEnrollment = new TreeMap<>();
-		professorCourse = new HashMap<>();
-		taCourseAssignment = new HashMap<>();
+		classEnrollment = new TreeMap<Integer, CourseSemester>();
+		professorCourse = new HashMap<Course, Professor>();
+		taCourseAssignment = new HashMap<Course, TA>();
 	}
 	//Could implement in parallel as a future enhancement
 	public void processInput(){		 

@@ -10,6 +10,7 @@ import models.Course;
 import models.CourseSemester;
 import models.Project1Scheduler;
 import models.Semester;
+import models.Student;
 import play.Logger;
 import play.data.Form;
 import play.db.jpa.Transactional;
@@ -18,8 +19,10 @@ import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
 import play.mvc.Result;
 import play.mvc.Security;
+import services.CourseService;
 import services.SemesterService;
 import services.ServicesInstances;
+import services.StudentService;
 import views.forms.LoginRequest;
 import views.forms.StudentRequest;
 
@@ -33,11 +36,26 @@ public class Application extends Controller {
         return ok(views.html.index.render(""));
     }
 
+	private static List<Course> studentCourses;
+	@Transactional
 	@Security.Authenticated(MyAuthenticator.class)
     public static Result showStudentForm() {
     	int semester = Integer.parseInt(session("semester"));
     	Logger.info("Semester " + semester);
-    	
+    	scheduler.calculateSchedule();
+    	studentCourses = new ArrayList<Course>();
+    	List<CourseSemester> cs = scheduler.getCourseSemestersforStudent(Integer.parseInt(session("id")));
+    	for (CourseSemester courseSemester : cs) {
+    		if (courseSemester.get_semester().getId() < semester) {
+    			Logger.info("course semester id" + courseSemester.get_semester().getId());
+    			CourseService courseService = (CourseService) ServicesInstances.COURSE_SERVICE.getService();
+	        	Course course = new Course();
+	        	course = courseService.getById(courseSemester.get_course().getId());
+	        	//Logger.info("course is " + course.getCourseName());
+    			studentCourses.add(course);
+    		}
+    	}
+    	Logger.info("old courses " + studentCourses);
     	return ok(views.html.studentrequest.render(
     				Form.form(StudentRequest.class).fill(new StudentRequest()),
     				StudentRequest.getCourseCountOptions(),
@@ -84,39 +102,32 @@ public class Application extends Controller {
             													StudentRequest.getCourseCountOptions(),
             													coursesForSemester));           
 	        }else{
-	        	//Project1Scheduler scheduler = new Project1Scheduler();
 	        	System.out.println(request.toString());
+	        	List<Integer> priorities = request.prioritiesForCoursesForSemester;
+	        	Logger.info("my priorities " + priorities);
+	        	int count = 0;
+	        	int existingCourseSize = studentCourses.size();
+	        	CourseService courseService = (CourseService) ServicesInstances.COURSE_SERVICE.getService();
+	        	Course course = new Course();
+	        	for (int i = existingCourseSize; i < 12; i++) {
+		            if (courseService != null ) {
+		            	 course = courseService.getById(priorities.get(count));
+		            }
+		            if (!(studentCourses.contains(course))) {
+		            	studentCourses.add(course);
+		            }
+	        		
+	        		count++;
+	        	}
+	        	StudentService studentService = (StudentService) ServicesInstances.STUDENT_SERVICE.getService();
+	        	Student student = new Student();
+	            if (studentService != null ) {
+	            	 student = studentService.getById(Integer.parseInt(session("id")));
+	            }	
+	        	student.setCourses(studentCourses);
+	        	studentService.updateStudent(student);
 	        	scheduler.calculateSchedule();
 	        	List<CourseSemester> cs = scheduler.getCourseSemestersforStudent(Integer.parseInt(session("id")));
-
-				Course cs1 = new Course(1,"Course 1");
-
-	            Course cs2 = new Course(2,"Course 2");
-
-	            Course cs3 = new Course(3,"Course 3");
-	            int semesterInt = Integer.parseInt(session("semester"));
-	            List<CourseSemester> csList = new ArrayList<CourseSemester>();
-	            SemesterService semesterService = (SemesterService) ServicesInstances.SEMESTER_SERVICE.getService();
-	            if (semesterService != null ) {
-	            	Semester Semester = semesterService.getById(semesterInt);
-	            	Semester sm2 = semesterService.getById(2);
-	                CourseSemester coursesemester1 = new CourseSemester(cs1,Semester);
-
-	                CourseSemester coursesemester2 = new CourseSemester(cs2,Semester);
-
-	                CourseSemester coursesemester3 = new CourseSemester(cs3,sm2);
-
-	                csList.add(coursesemester1);
-
-	                csList.add(coursesemester2);
-
-	                csList.add(coursesemester3);
-
-	                  	
-	            }
-
-//	            return ok(views.html.studentrequestoutput.render(csList));
-//	        	//return ok(request.toString());
 	            return ok(views.html.studentrequestoutput.render(cs));
 	        }
     	}

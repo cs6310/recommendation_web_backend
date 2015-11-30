@@ -54,7 +54,7 @@ semesterCourses: List[String])
 						<tr>
 							<td>@course</td>
 						    @for(priority <- 1 to semesterCourses.length) {
-						    	<td><input type="radio" name="prioritiesForCoursesForSemester[@index]" data-col="@priority" value="@priority"></td>
+						    	<td><input type="radio" name="prioritiesForCoursesForSemester[@index]" data-col="@priority" value="@course"></td>
 						    }
 						</tr>
 				   }

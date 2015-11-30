@@ -19,7 +19,7 @@ public class Student extends Person {
   /**
    * The list of individual courses the student wants to take.
    */
-  @ManyToMany(cascade = CascadeType.ALL , fetch = FetchType.EAGER)
+  @ManyToMany(cascade = CascadeType.MERGE , fetch = FetchType.EAGER)
   @JoinColumn(name = "PERSON_ID_REF", referencedColumnName = "PERSON_ID")
   private List<Course> courses;
 
@@ -31,7 +31,7 @@ public class Student extends Person {
 	  return permission_type;
   }
 
-  @ManyToMany(cascade = CascadeType.ALL , fetch = FetchType.EAGER)
+  @ManyToMany(cascade = CascadeType.MERGE , fetch = FetchType.EAGER)
   @JoinColumn(name = "PERSON_ID_REF", referencedColumnName = "PERSON_ID")
   private List<CourseSemester> course_semester; 
 
