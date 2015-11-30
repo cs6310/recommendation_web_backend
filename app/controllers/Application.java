@@ -92,7 +92,7 @@ public class Application extends Controller {
 
 	            Course cs2 = new Course(2,"Course 2");
 
-	            Course cs3 = new Course(2,"Course 3");
+	            Course cs3 = new Course(3,"Course 3");
 	            int semesterInt = Integer.parseInt(session("semester"));
 	            List<CourseSemester> csList = new ArrayList<CourseSemester>();
 	            SemesterService semesterService = (SemesterService) ServicesInstances.SEMESTER_SERVICE.getService();
@@ -153,10 +153,16 @@ public class Application extends Controller {
 	  			return ok(views.html.adminrequest.render(
 		    	    		"ERROR: Required 3 files. Uploaded " + fileCounter + " files.")); 
 	  		}else{
-	  			//Parse input from all submitted files and convert them in Hashmaps.
+	  			//Parse input from all submitted files and convert them into Maps.
 	  			adReq = new AdministratorRequest(fileList);
 	  			adReq.processInput();
-	  			return ok(views.html.adminrequest.render("Files submitted successfully!"));
+	  			List<CourseSemester> list = new ArrayList<CourseSemester>();
+	  			return ok(views.html.adminoutput.render(
+	  					"Files submitted successfully!", 
+	  					list,
+	  					adReq.getClassEnrollment())
+	  					//, Student->Courses_>Recommended Solution is to be passed to adminoutput template here.
+	  					);
 	  		}
 	  	  }catch(NullPointerException e){
 	  		  System.out.println(e.getMessage());

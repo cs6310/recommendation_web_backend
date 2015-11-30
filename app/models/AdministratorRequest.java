@@ -4,11 +4,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
+import java.util.TreeMap;
+
+import helpers.StudentLoader;
 /**
  * Class to handle Administrator users input 
  * provided through files. 
@@ -16,7 +17,9 @@ import java.util.StringTokenizer;
  */
 public class AdministratorRequest {
 	// List of classes offered next semester and their enrollment limit
-	private Map<String,CourseSemester> classEnrollment;
+	private Map<Integer,CourseSemester> classEnrollment;
+	//List of classes offered next semester and their preference(the amount of students that wish to take a class)
+	private Map<Integer,Integer> studentPreference;
 	// Professor-Course Assignment
 	private Map<Course, Professor> professorCourse;
 	// TA-Course Assignment
@@ -30,7 +33,7 @@ public class AdministratorRequest {
 	
 	public AdministratorRequest(List<File> fileList){
 		inputFileList = fileList;
-		classEnrollment = new HashMap<>();
+		classEnrollment = new TreeMap<>();
 		professorCourse = new HashMap<>();
 		taCourseAssignment = new HashMap<>();
 	}
@@ -39,7 +42,9 @@ public class AdministratorRequest {
 		processInputClassEnrollment();
 		processInputProfCourse();
 		processInputTACourse();
+
 	}
+	
 	
 	public boolean processInputClassEnrollment(){
 		boolean result = false; 
@@ -77,8 +82,9 @@ public class AdministratorRequest {
         if(arr.length == 3){
         	int id = Integer.parseInt(arr[0]);
             int enrollLimit = Integer.parseInt(arr[2]);
-            classEnrollment.put(arr[0], 
-            		new CourseSemester(true, new Course(id, arr[1]), new Semester(0,"Spring 2016"),enrollLimit));            
+            classEnrollment.put(id, 
+            		new CourseSemester(true, new Course(id, arr[1]), new Semester(0,"Spring 2016"),enrollLimit)); 
+            
         }        
 	}
 	
@@ -162,10 +168,10 @@ public class AdministratorRequest {
         }        
 	}
 	
-	public Map<String, CourseSemester> getClassEnrollment() {
+	public Map<Integer, CourseSemester> getClassEnrollment() {
 		return classEnrollment;
 	}
-	public void setClassEnrollment(Map<String, CourseSemester> classEnrollment) {
+	public void setClassEnrollment(Map<Integer, CourseSemester> classEnrollment) {
 		this.classEnrollment = classEnrollment;
 	}
 	public Map<Course, Professor> getProfessorCourse() {
@@ -185,6 +191,12 @@ public class AdministratorRequest {
 	}
 	public void setInputFileList(List<File> inputFileList) {
 		this.inputFileList = inputFileList;
+	}
+	public Map<Integer, Integer> getStudentPreference() {
+		return studentPreference;
+	}
+	public void setStudentPreference(Map<Integer, Integer> studentPreference) {
+		this.studentPreference = studentPreference;
 	}
 	
 	

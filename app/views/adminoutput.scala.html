@@ -1,0 +1,42 @@
+@(message: String)(courseSemesterOptions: List[CourseSemester])(coursePreference: Map[Integer, models.CourseSemester])  
+
+@import helper._
+
+
+@main {
+
+	
+	<h2 style="color: red;">@message</h2>
+	<fieldset>
+	   <legend><h2>Course Preferences</h2></legend>
+	   	 <table class="table table-bordered">
+	     	<tr>
+		    	<th>Course ID</th>
+		    	<th>Course Name</th>
+		    	<th>Enrollment Limit</th>
+		    	<th>Preference</th>		    	
+       		</tr>       		
+       		@for((key, crsSemester) <- coursePreference){       		
+       		<tr>
+       			<td>@key</td>
+       			<td>@crsSemester.get_course().getCourseName</td>
+       			<td>@crsSemester.get_enrollmment_limit</td>
+       			<td>@crsSemester.get_enrollmment_limit</td>
+       		</tr>
+       		}
+			   
+		</table>
+		<legend><h2>Computer-Aided Recommendations</h2></legend>
+	   	 <table class="table table-bordered">
+	     	<tr>
+		    	<th>Student Id</th>
+		    	<th>Courses</th>
+		    	<th>Recommended</th>
+       		</tr>
+			   
+		</table>
+	</fieldset>
+	
+	
+	
+}
