@@ -4,6 +4,10 @@ public class Professor extends Person
 {
   private String permission_type;
 
+  /**
+   * Constructor
+   * @param id (required) The Professor id.
+   */
   Professor(int id) {
     super(id);
   }

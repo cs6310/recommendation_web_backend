@@ -87,8 +87,9 @@ public class Application extends Controller {
 	        	//Project1Scheduler scheduler = new Project1Scheduler();
 	        	System.out.println(request.toString());
 	        	scheduler.calculateSchedule();
-	        	//TODO create get courses for student
-	        	Course cs1 = new Course(1,"Course 1");
+	        	List<CourseSemester> cs = scheduler.getCourseSemestersforStudent(Integer.parseInt(session("id")));
+
+				Course cs1 = new Course(1,"Course 1");
 
 	            Course cs2 = new Course(2,"Course 2");
 
@@ -114,8 +115,9 @@ public class Application extends Controller {
 	                  	
 	            }
 
-	            return ok(views.html.studentrequestoutput.render(csList));
-	        	//return ok(request.toString());
+//	            return ok(views.html.studentrequestoutput.render(csList));
+//	        	//return ok(request.toString());
+	            return ok(views.html.studentrequestoutput.render(cs));
 	        }
     	}
     } 
