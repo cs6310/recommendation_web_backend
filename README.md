@@ -7,13 +7,14 @@
 - [Tech Stack](#tech-stack)
 
 ## Running
+- Get a gurobi license and download gurobi.jar and place in lib folder: [Gurobi](https://www.gurobi.com/index)
 - Run the local activator script
   - For Linux/ Mac OS X: `./activator run`
   - For Windows: `./activator.bat run`
     - First time runs will cause dependencies to download which will take awhile.
 - Navigate to `localhost:9000/login`
   - It will compile for the first time (will take some time), create database tables, and run.
-  - The website will be visible in the browser 
+  - The website will be visible in the browser
 
 ## Using
 ### Student
@@ -56,4 +57,3 @@
 This project uses:
 - [Play Framework](https://www.playframework.com/)
 - H2 In-Memory Database
-
