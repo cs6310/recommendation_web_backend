@@ -18,3 +18,5 @@ dist
 /.settings
 /project/*-shim.sbt
 .DS_Store
+lib/gurobi.jar
+

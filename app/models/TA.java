@@ -13,6 +13,9 @@ public class TA extends Person
     super(id);
   }
 
+  /**
+   * @return a string that is the TAs permission level
+   */
   public String get_permission() {
 	  return permission_type;
   }
