@@ -12,6 +12,9 @@ import javax.persistence.Table;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+/**
+ * This class is inteded to represent a course
+ */
 @Entity
 @Table(name="Course")
 public class Course {
@@ -32,6 +35,9 @@ public class Course {
 	  this.parent = null;
   }
 
+  /**
+   * @return the string representation of a user
+   */
   public String toString() {
 	  String childClassesStr = "";
 	  if (childClasses == null) {
@@ -99,6 +105,9 @@ public class Course {
 	  return id;
   }
 
+  /**
+   * @return an int for the hashcode
+   */
   @Override
   public int hashCode() {
       return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
@@ -107,6 +116,10 @@ public class Course {
           toHashCode();
   }
 
+  /**
+   * this overrides the equals comparater for different courses
+   * @return the boolean for an equal check
+   */
   @Override
   public boolean equals(Object obj) {
 	  if (obj == null) {
