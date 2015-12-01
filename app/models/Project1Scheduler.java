@@ -391,27 +391,18 @@ public class Project1Scheduler implements Scheduler {
 					  e.printStackTrace();
 				  }
 			  }
-			 // System.out.println("");
 		  }
 	  }
-	  
-	 
+
 	  for (CourseSemester cs : course_semester) {
 		  int counter = 0;
 		  if (cs.get_semester().getId() == semester) {
-			  //System.out.println("inside coursemesterloop");
 			  for (StudentCourseSemester studentcoursesemester : SCS) {
 				  if ((cs.get_semester().getId() == studentcoursesemester.get_course_semester().get_semester().getId()) && (cs.get_course().getId() == studentcoursesemester.get_course_semester().get_course().getId())) {
-					  //System.out.println("inside coursemesterloopCOUNTER");
 					  counter++;
-					  //System.out.println("** count " + counter);
 				  }
 			  }
-			 // counter = counter * 100;
-			  //population = population * 100;
-			  //System.out.println("HERE" + counter + " " + population);
 			  Float percentage = ((float)counter/(float)population)*100;
-			  //System.out.println("percentage " + percentage);
 			  results.put(cs.get_course(), percentage);
 		  }
 	  }

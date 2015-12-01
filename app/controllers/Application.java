@@ -48,13 +48,11 @@ public class Application extends Controller {
 	@Security.Authenticated(MyAuthenticator.class)
     public static Result showStudentForm() {
     	int semester = Integer.parseInt(session("semester"));
-    	Logger.info("Semester " + semester);
     	scheduler.calculateSchedule();
     	studentCourses = new ArrayList<Course>();
     	List<CourseSemester> cs = scheduler.getCourseSemestersforStudent(Integer.parseInt(session("id")));
     	for (CourseSemester courseSemester : cs) {
     		if (courseSemester.get_semester().getId() < semester) {
-    			Logger.info("course semester id" + courseSemester.get_semester().getId());
     			CourseService courseService = (CourseService) ServicesInstances.COURSE_SERVICE.getService();
 	        	Course course = new Course();
 	        	course = courseService.getById(courseSemester.get_course().getId());
@@ -62,7 +60,6 @@ public class Application extends Controller {
     			studentCourses.add(course);
     		}
     	}
-    	Logger.info("old courses " + studentCourses);
     	return ok(views.html.studentrequest.render(
     				Form.form(StudentRequest.class).fill(new StudentRequest()),
     				StudentRequest.getCourseCountOptions(),
@@ -111,7 +108,6 @@ public class Application extends Controller {
 	        }else{
 	        	System.out.println(request.toString());
 	        	List<Integer> priorities = request.prioritiesForCoursesForSemester;
-	        	Logger.info("my priorities " + priorities);
 	        	int count = 0;
 	        	int existingCourseSize = studentCourses.size();
 	        	CourseService courseService = (CourseService) ServicesInstances.COURSE_SERVICE.getService();
@@ -133,13 +129,11 @@ public class Application extends Controller {
 	            if (studentService != null ) {
 	            	 student = studentService.getById(Integer.parseInt(session("id")));
 	            }	
-	            Logger.info("NEW STUDENT LIST " + studentCourses);
 	        	student.setCourses(studentCourses);
 	        	studentService.updateStudent(student);
 	        	scheduler.calculateSchedule();
 	        	List<CourseSemester> cs = scheduler.getCourseSemestersforStudent(Integer.parseInt(session("id")));
 	        	HashMap<Course,Float> demand = scheduler.getCourseDemand(cs, semester);
-	        	Logger.info("***DEMAND IS " + demand + " " + demand.values());
 	        	Collections.sort(cs, new Comparator<CourseSemester>() {
 
 	                public int compare(CourseSemester cs1, CourseSemester cs2) {
@@ -185,7 +179,7 @@ public class Application extends Controller {
 	  	  int TOTAL_FILES = 3;
 	  	  try{
 	  		  for(int i=0; i < fileNamesList.size(); i++){
-	  			System.out.println("Inside the upload method-> for loop");
+	  			//System.out.println("Inside the upload method-> for loop");
 	  			  filePartList.add(body.getFile(fileNamesList.get(i)));
 	  			if (filePartList.get(i) != null) {
 	  				FilePart filePart = filePartList.get(i);
