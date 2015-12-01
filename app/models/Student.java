@@ -33,7 +33,7 @@ public class Student extends Person {
 
   @ManyToMany(cascade = CascadeType.MERGE , fetch = FetchType.EAGER)
   @JoinColumn(name = "PERSON_ID_REF", referencedColumnName = "PERSON_ID")
-  private List<CourseSemester> course_semester; 
+  private List<CourseSemester> course_semester;
 
 
   public Student() {
@@ -46,9 +46,9 @@ public class Student extends Person {
    */
   public Student(int id, List<Course> courses) {
 	  super(id);
- 
+
       this.courses = courses;
-  } 
+  }
 
   /**
    * @return the list of courses the student wants to take.
@@ -58,7 +58,6 @@ public class Student extends Person {
   }
 
   /**
-   * @return nothing
    * @param requestedCourses (required) The ids of the courses that a student wants to take
    */
   public void setCourses(List<Course> requestedCourses) {
@@ -67,7 +66,11 @@ public class Student extends Person {
 		  courses.add(course);
 	  }
   }
-  
+
+  /**
+   * @param courseId (required) the id used to look up the couse
+   * @return true or false
+   */
   public boolean findStudentCourseById(int courseId) {
 	  for (Course course : courses) {
 		  if (course.getId() == courseId) {
@@ -76,13 +79,21 @@ public class Student extends Person {
 	  }
 	  return false;
   }
+
+  /**
+   * @param courseSemesters (required) the courseSemesters to be set for the Student
+   */
   public void setCourseSemesters(List<CourseSemester> courseSemesters) {
 	  course_semester = new ArrayList<CourseSemester>(courseSemesters);
   }
+
+  /**
+   * @return the CourseSemesters associated with this student as a List (ArrayList)
+   */
   public List<CourseSemester> getCourseSemesters() {
 	  return course_semester;
   }
-  
+
   /*
    *  (non-Javadoc)
    * @see java.lang.Object#toString()

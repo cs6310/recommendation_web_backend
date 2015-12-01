@@ -8,18 +8,26 @@ public class StudentCourseSemester
   // The course semester this is connected to
   private CourseSemester course_semester;
 
-  // Initializer takes in a Student and a CourseSemester
+  /**
+   * Constructor
+   * @param student (required) the student in the join Class
+   * @param courseSemester (required) the CourseSemester in the join class
+   */
   StudentCourseSemester(Student student, CourseSemester courseSemester) {
     this.student = student;
     this.course_semester = courseSemester;
   }
 
-  // returns the Student
+  /**
+   * @return the Student of the join
+   */
   public Student get_student() {
 	  return student;
   }
 
-  // returns the CourseSemester
+  /**
+   * @return the CourseSemester of the join
+   */
   public CourseSemester get_course_semester() {
 	  return course_semester;
   }

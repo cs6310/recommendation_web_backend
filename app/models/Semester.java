@@ -12,20 +12,26 @@ public class Semester
 
 	public Semester() {}
 
-		/**
-	   * Constructor
-	   * @param id (required) The id for the semester
-	   * @param semesterName (required) The name of the semester like Fall, Spring, or Summer.
-	   */
+	/**
+   * Constructor
+   * @param id (required) The id for the semester
+   * @param semesterName (required) The name of the semester like Fall, Spring, or Summer.
+   */
 	public Semester(int id, String semesterName) {
 		this.id = id;
 		this.semesterName = semesterName;
 	}
 
+	/**
+	 * @return the id for the Semester as an int
+	 */
 	public int getId() {
 		return id;
 	}
 
+	/**
+	 * @param id (required) the id for the Semester as an int
+	 */
 	public void setId(int id) {
 		this.id = id;
 	}
