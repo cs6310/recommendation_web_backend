@@ -30,6 +30,15 @@
   - View the courses for the semester
   - View the courses for all the semesters.
 
+### Administrator
+- Logging in as an Administrator (All ids are numerical)
+  - Pick an id greater than 1000.
+  - Type the password `12345`
+- Upload input files(A total of 3 files are needed. FIles are provided under the conf/resourses directory)
+  - Each file has specific formatting requirements and are named according the information they contain.
+  - Submit the request
+- On the next page, the information from the files is displayed.
+
 ## Development
 ### Working in Eclipse (One-time setup per developer)
 
