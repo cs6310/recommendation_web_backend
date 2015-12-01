@@ -6,8 +6,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import controllers.middleware.MyAuthenticator;
 import models.AdministratorRequest;
@@ -136,6 +138,8 @@ public class Application extends Controller {
 	        	studentService.updateStudent(student);
 	        	scheduler.calculateSchedule();
 	        	List<CourseSemester> cs = scheduler.getCourseSemestersforStudent(Integer.parseInt(session("id")));
+	        	//HashMap<Course,Integer> demand = scheduler.getCourseDemand(cs, semester);
+	        	//Logger.info("***DEMAND IS " + demand + " " + demand.values());
 	        	Collections.sort(cs, new Comparator<CourseSemester>() {
 
 	                public int compare(CourseSemester cs1, CourseSemester cs2) {
@@ -147,10 +151,10 @@ public class Application extends Controller {
 	                	//return 0;
 	                }
 	            });
-	        	Map<Semester, List<Course>> fullSchedule = new LinkedHashMap<Semester, List<Course>>();
+	        	Map<Semester, Set<Course>> fullSchedule = new LinkedHashMap<Semester, Set<Course>>();
 	        	for (CourseSemester courseSemester: cs) {
 	        		if (fullSchedule.containsKey(courseSemester.get_semester()) == false) {
-	        			List<Course> courses_ = new ArrayList<Course>();
+	        			Set<Course> courses_ = new LinkedHashSet<Course>();
 	        			courses_.add(courseSemester.get_course());
 	        			fullSchedule.put(courseSemester.get_semester(), courses_);
 	        		} else {
