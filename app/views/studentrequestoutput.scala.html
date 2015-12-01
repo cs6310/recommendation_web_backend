@@ -1,4 +1,5 @@
-@(courseSemesterOptions: List[CourseSemester])
+@(courseSemesterOptions: List[CourseSemester],
+fullSchedule: Map[Semester, List[Course]])
 @import helper._
 
 @main {
@@ -25,18 +26,36 @@
 
 
 	        <fieldset>
-	           <legend><h1>Recommended Semester Courses</h1></legend>
+	           <legend><h1>Assigned Courses for Semester @session.get("semester") </h1></legend>
 	           	<table class="table table-bordered">
 	           		<tr>
 		           		<th>Course</th>
 	           		</tr>
+				@for((courseSemester, index) <- courseSemesterOptions.zipWithIndex) {
 
-				   @for((courseSemester, index) <- courseSemesterOptions.zipWithIndex) {
 				   		@if(courseSemester.get_semester().getId().toString() == session.get("semester")) {
 							<tr>
 								<td>@courseSemester.get_course().getCourseName()</td>
 							</tr>
 						}
+				   }
+				</table>
+				
+				<legend><h1>All Assigned Courses </h1></legend>
+	           	<table class="table table-bordered">
+	           		<tr>
+		           		<th>Course</th>
+	           		</tr>
+
+				   @for((semester, courses) <- fullSchedule) {
+							<tr>
+								<td>@semester.getSemesterName()</td>
+							</tr>
+							@for((course, index) <- courses.zipWithIndex) {
+								<tr>
+									<td>@course.getCourseName()</td>
+								</tr>
+							}
 				   }
 				</table>
 	        </fieldset>

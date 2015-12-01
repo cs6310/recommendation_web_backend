@@ -2,7 +2,12 @@ package controllers;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import controllers.middleware.MyAuthenticator;
 import models.AdministratorRequest;
@@ -115,6 +120,8 @@ public class Application extends Controller {
 		            }
 		            if (!(studentCourses.contains(course))) {
 		            	studentCourses.add(course);
+		            } else {
+		            	count--;
 		            }
 	        		
 	        		count++;
@@ -124,11 +131,33 @@ public class Application extends Controller {
 	            if (studentService != null ) {
 	            	 student = studentService.getById(Integer.parseInt(session("id")));
 	            }	
+	            Logger.info("NEW STUDENT LIST " + studentCourses);
 	        	student.setCourses(studentCourses);
 	        	studentService.updateStudent(student);
 	        	scheduler.calculateSchedule();
 	        	List<CourseSemester> cs = scheduler.getCourseSemestersforStudent(Integer.parseInt(session("id")));
-	            return ok(views.html.studentrequestoutput.render(cs));
+	        	Collections.sort(cs, new Comparator<CourseSemester>() {
+
+	                public int compare(CourseSemester cs1, CourseSemester cs2) {
+	                	int val = cs1.get_semester().getId() - cs2.get_semester().getId();
+	                	if (val != 0)
+	                		return val;
+	                	return cs1.get_course().getId() - cs2.get_course().getId();
+	                    // return o2.getScores().get(0).compareTo(o1.getScores().get(0));
+	                	//return 0;
+	                }
+	            });
+	        	Map<Semester, List<Course>> fullSchedule = new LinkedHashMap<Semester, List<Course>>();
+	        	for (CourseSemester courseSemester: cs) {
+	        		if (fullSchedule.containsKey(courseSemester.get_semester()) == false) {
+	        			List<Course> courses_ = new ArrayList<Course>();
+	        			courses_.add(courseSemester.get_course());
+	        			fullSchedule.put(courseSemester.get_semester(), courses_);
+	        		} else {
+	        			fullSchedule.get(courseSemester.get_semester()).add(courseSemester.get_course());
+	        		}
+	        	}
+	            return ok(views.html.studentrequestoutput.render(cs, fullSchedule));
 	        }
     	}
     } 
