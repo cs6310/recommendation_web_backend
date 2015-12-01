@@ -12,15 +12,15 @@
 			</div>
 		}
 		@helper.form(action = routes.Application.authenticate()) {
-	
+
 	        <fieldset>
 				<div class="form-group">
 		            @inputText(myForm("id"),
 		                        '_label -> "User ID",
 		                        'class -> "form-control",
-		                        '_help -> "Please enter your id.")
+		                        '_help -> "Please enter your id. Any id over 1000 will register as an admin.")
 	            </div>
-	
+
 				<div class="form-group">
 	            	@inputPassword(myForm("password"),
 	                            '_label -> "Password",
