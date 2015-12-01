@@ -17,7 +17,7 @@ public class StudentService {
 		EntityManager em = JPA.em();
 		String queryString = "SELECT s from Student s"; //HSQL syntax
 		TypedQuery<Student> query = em.createQuery(queryString, Student.class);
-		return query.getResultList();		
+		return query.getResultList();
 	}
 	public boolean storeStudent(Student student) {
 		EntityManager em = JPA.em();
@@ -28,13 +28,13 @@ public class StudentService {
 		}
 		return true;
 	}
-	
+
 	public boolean updateStudent(Student student) {
 		EntityManager em = JPA.em();
 		try {
-		em.merge(student);
+			em.merge(student);
 		} catch (Exception e) {
-		return false;
+			return false;
 		}
 		return true;
 		}

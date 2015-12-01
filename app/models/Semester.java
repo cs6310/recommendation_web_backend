@@ -7,7 +7,9 @@ import javax.persistence.Id;
 public class Semester
 {
 	@Id
+	// id for keeping track of semesters
 	private int id;
+	// name of the semester such as "Fall 2016"
 	private String semesterName;
 
 	public Semester() {}
@@ -35,15 +37,23 @@ public class Semester
 	public void setId(int id) {
 		this.id = id;
 	}
-
+	/**
+	 * @return the string for the semester's name
+	 */
 	public String getSemesterName() {
 		return semesterName;
 	}
 
+	/**
+	 * @param semesterName (required) the string for the semester's name
+	 */
 	public void setSemesterName(String semesterName) {
 		this.semesterName = semesterName;
 	}
 
+	/**
+	 * @return a string representation of the semester
+	 */
 	public String toString() {
 		return "id: " + id
 				+ " semesterName: " + semesterName;

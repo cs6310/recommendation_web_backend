@@ -31,7 +31,7 @@ public class Course {
 	  this.childClasses = null;
 	  this.parent = null;
   }
-  
+
   public String toString() {
 	  String childClassesStr = "";
 	  if (childClasses == null) {
@@ -46,56 +46,59 @@ public class Course {
 			  + " childCourses: " + childClassesStr
 			  + " parent: " + ((parent == null)? "no parent": ""+parent.id);
   }
-  
+
+  /**
+   * @param the course that is a prerequisite for this
+   */
   public void setParentClass(Course course) {
 	  parent = course;
   }
-  
+
+  /**
+   * @param the courses that this course is a prerequisite for
+   */
   public void setChildClasses(List<Course> courses) {
 	  childClasses = courses;
   }
-  
+
+  /**
+   * @param the course that this course is a prerequisite for
+   */
   public void addChildClass(Course course) {
 	  if (childClasses == null) {
 		  childClasses = new ArrayList<Course>();
 	  }
 	  childClasses.add(course);
   }
-  
+
+  /**
+   * @return the course that is a prerequisite for this
+   */
   public Course getParentClass() {
 	  return parent;
   }
 
+  /**
+   * @return the courses that this course is a prerequisite for
+   */
   public List<Course> getChildCourses() {
 	  return childClasses;
   }
-  
+
+  /**
+   * @return the string for the name of the course
+   */
   public String getCourseName() {
 	  return courseName;
   }
 
-  /*
-  public Set<CourseSemester> get_course_semesters() {
-	  return course_semesters;
-  }
-  
-  public void add_course_semester(CourseSemester course_semester) {
-	  course_semesters.add(course_semester);
-  }
-  */
-  /*
-  public void set_course_ta(List<TA> Ta) {
-	  this.courseTAs = ta;
-  }
-  
-  public List<TA> get_course_ta() {
-	  return courseTAs;
-  }
-  */
+  /**
+   * @return the id for the course for identification
+   */
   public int getId() {
 	  return id;
   }
-  
+
   @Override
   public int hashCode() {
       return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers

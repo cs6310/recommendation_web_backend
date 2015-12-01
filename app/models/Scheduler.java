@@ -5,6 +5,7 @@ import java.util.Vector;
 
 import views.forms.StudentRequest;
 
+// This is the interface for our schedulers, this code is being re-used from project 1
 public interface Scheduler {
     public void calculateSchedule();
 

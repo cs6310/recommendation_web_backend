@@ -12,6 +12,9 @@ public class Administrator extends Person
     super(id);
   }
 
+  /**
+   * @return a string that is the Administrator's permission level
+   */
   public String get_permission() {
 	  return permission_type;
   }
