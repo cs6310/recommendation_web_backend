@@ -123,7 +123,7 @@ public class Application extends Controller {
 		            if (!(studentCourses.contains(course))) {
 		            	studentCourses.add(course);
 		            } else {
-		            	count--;
+		            	//count--;
 		            }
 	        		
 	        		count++;
@@ -138,8 +138,8 @@ public class Application extends Controller {
 	        	studentService.updateStudent(student);
 	        	scheduler.calculateSchedule();
 	        	List<CourseSemester> cs = scheduler.getCourseSemestersforStudent(Integer.parseInt(session("id")));
-	        	//HashMap<Course,Integer> demand = scheduler.getCourseDemand(cs, semester);
-	        	//Logger.info("***DEMAND IS " + demand + " " + demand.values());
+	        	HashMap<Course,Float> demand = scheduler.getCourseDemand(cs, semester);
+	        	Logger.info("***DEMAND IS " + demand + " " + demand.values());
 	        	Collections.sort(cs, new Comparator<CourseSemester>() {
 
 	                public int compare(CourseSemester cs1, CourseSemester cs2) {
@@ -161,7 +161,7 @@ public class Application extends Controller {
 	        			fullSchedule.get(courseSemester.get_semester()).add(courseSemester.get_course());
 	        		}
 	        	}
-	            return ok(views.html.studentrequestoutput.render(cs, fullSchedule));
+	            return ok(views.html.studentrequestoutput.render(cs, fullSchedule,demand));
 	        }
     	}
     } 

@@ -365,12 +365,12 @@ public class Project1Scheduler implements Scheduler {
 	  return coursesForStudentBySemester;
   }
   
-  public HashMap<Course,Integer> getCourseDemand(List<CourseSemester> course_semester, int semester){
+  public HashMap<Course,Float> getCourseDemand(List<CourseSemester> course_semester, int semester){
 	  StudentService studentService = (StudentService) ServicesInstances.STUDENT_SERVICE.getService();
 	  List<Student> students = new ArrayList<Student>(studentService.getAllStudents());
 	  int population = students.size();
 	  List<StudentCourseSemester> SCS = new ArrayList<StudentCourseSemester>();
-	  HashMap<Course,Integer> results = new HashMap<Course,Integer>();
+	  HashMap<Course,Float> results = new HashMap<Course,Float>();
 	  for (Student student : students) {
 		  for (int semesterId = 1; semesterId <= helpers.Constants.NUMBER_OF_SEMESTERS; semesterId++) {
 			  Semester newSemester = new Semester();
@@ -394,15 +394,24 @@ public class Project1Scheduler implements Scheduler {
 			 // System.out.println("");
 		  }
 	  }
-	  int counter = 0;
+	  
+	 
 	  for (CourseSemester cs : course_semester) {
+		  int counter = 0;
 		  if (cs.get_semester().getId() == semester) {
+			  //System.out.println("inside coursemesterloop");
 			  for (StudentCourseSemester studentcoursesemester : SCS) {
-				  if ((cs.get_semester().equals(studentcoursesemester.get_course_semester().get_semester())) && (cs.get_course().equals(studentcoursesemester.get_course_semester().get_course()))) {
+				  if ((cs.get_semester().getId() == studentcoursesemester.get_course_semester().get_semester().getId()) && (cs.get_course().getId() == studentcoursesemester.get_course_semester().get_course().getId())) {
+					  //System.out.println("inside coursemesterloopCOUNTER");
 					  counter++;
+					  //System.out.println("** count " + counter);
 				  }
 			  }
-			  int percentage = (counter/population)*100;
+			 // counter = counter * 100;
+			  //population = population * 100;
+			  //System.out.println("HERE" + counter + " " + population);
+			  Float percentage = ((float)counter/(float)population)*100;
+			  //System.out.println("percentage " + percentage);
 			  results.put(cs.get_course(), percentage);
 		  }
 	  }
