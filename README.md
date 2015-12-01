@@ -5,6 +5,7 @@
 - [Using](#using)
 - [Development](#development)
 - [Tech Stack](#tech-stack)
+- [Source code](#source-code)
 
 ## Running
 - Get a gurobi license and download gurobi.jar and place in lib folder: [Gurobi](https://www.gurobi.com/index)
@@ -66,3 +67,7 @@
 This project uses:
 - [Play Framework](https://www.playframework.com/)
 - H2 In-Memory Database
+
+### Source
+
+You can view our source code on [Github](https://github.com/cs6310/recommendation_web_backend)
