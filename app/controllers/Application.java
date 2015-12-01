@@ -51,9 +51,9 @@ public class Application extends Controller {
     	scheduler.calculateSchedule();
     	studentCourses = new ArrayList<Course>();
     	List<CourseSemester> cs = scheduler.getCourseSemestersforStudent(Integer.parseInt(session("id")));
+		CourseService courseService = (CourseService) ServicesInstances.COURSE_SERVICE.getService();
     	for (CourseSemester courseSemester : cs) {
     		if (courseSemester.get_semester().getId() < semester) {
-    			CourseService courseService = (CourseService) ServicesInstances.COURSE_SERVICE.getService();
 	        	Course course = new Course();
 	        	course = courseService.getById(courseSemester.get_course().getId());
 	        	//Logger.info("course is " + course.getCourseName());
@@ -63,7 +63,7 @@ public class Application extends Controller {
     	return ok(views.html.studentrequest.render(
     				Form.form(StudentRequest.class).fill(new StudentRequest()),
     				StudentRequest.getCourseCountOptions(),
-    				StudentRequest.getCoursesForSemester(semester)
+    				StudentRequest.getCoursesForSemester(semester), courseService
     				));
     }
     
@@ -88,14 +88,14 @@ public class Application extends Controller {
     	Form<StudentRequest> studentRequestForm = Form.form(StudentRequest.class).bindFromRequest();
     	int semester = Integer.parseInt(session("semester"));
     	List<String> coursesForSemester = StudentRequest.getCoursesForSemester(semester);
-
+    	CourseService courseService = (CourseService) ServicesInstances.COURSE_SERVICE.getService();
     	if(studentRequestForm.hasErrors()){
         	//for (Map.Entry<String, ValidationError> entry: studentRequestForm.errors())
         	System.out.println("Error "+ studentRequestForm.errorsAsJson().toString()); 
             flash("error", "Please correct errors below.");
             return badRequest(views.html.studentrequest.render(studentRequestForm,
             													StudentRequest.getCourseCountOptions(),
-            													coursesForSemester));
+            													coursesForSemester, courseService));
     	}else {
         	StudentRequest request = studentRequestForm.get();
         	System.out.println(request.toString());
@@ -104,13 +104,13 @@ public class Application extends Controller {
             		+ " of "+ coursesForSemester.size() + " courses. Please prioritize all courses.");
             return badRequest(views.html.studentrequest.render(studentRequestForm,
             													StudentRequest.getCourseCountOptions(),
-            													coursesForSemester));           
+            													coursesForSemester, courseService));           
 	        }else{
 	        	System.out.println(request.toString());
 	        	List<Integer> priorities = request.prioritiesForCoursesForSemester;
 	        	int count = 0;
 	        	int existingCourseSize = studentCourses.size();
-	        	CourseService courseService = (CourseService) ServicesInstances.COURSE_SERVICE.getService();
+	        	//CourseService courseService = (CourseService) ServicesInstances.COURSE_SERVICE.getService();
 	        	Course course = new Course();
 	        	for (int i = existingCourseSize; i < 12; i++) {
 		            if (courseService != null ) {

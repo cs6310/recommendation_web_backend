@@ -1,6 +1,7 @@
 @(myForm: Form[views.forms.StudentRequest],
 courseCountOptions: List[String],
-semesterCourses: List[String])
+semesterCourses: List[String],
+courseService: services.CourseService)
 @import helper._
 
 @main {
@@ -52,7 +53,7 @@ semesterCourses: List[String])
 
 				   @for((course, index) <- semesterCourses.zipWithIndex) {
 						<tr>
-							<td>@course</td>
+							<td>@courseService.getById(Integer.parseInt(course)).getCourseName()</td>
 						    @for(priority <- 1 to semesterCourses.length) {
 						    	<td><input type="radio" name="prioritiesForCoursesForSemester[@index]" data-col="@priority" value="@course"></td>
 						    }
