@@ -364,4 +364,48 @@ public class Project1Scheduler implements Scheduler {
 
 	  return coursesForStudentBySemester;
   }
+  
+  public HashMap<Course,Integer> getCourseDemand(List<CourseSemester> course_semester, int semester){
+	  StudentService studentService = (StudentService) ServicesInstances.STUDENT_SERVICE.getService();
+	  List<Student> students = new ArrayList<Student>(studentService.getAllStudents());
+	  int population = students.size();
+	  List<StudentCourseSemester> SCS = new ArrayList<StudentCourseSemester>();
+	  HashMap<Course,Integer> results = new HashMap<Course,Integer>();
+	  for (Student student : students) {
+		  for (int semesterId = 1; semesterId <= helpers.Constants.NUMBER_OF_SEMESTERS; semesterId++) {
+			  Semester newSemester = new Semester();
+			  SemesterService semesterService = (SemesterService) ServicesInstances.SEMESTER_SERVICE.getService();
+			  if (semesterService != null ) {
+				  newSemester = semesterService.getById(semesterId);
+			  }
+			  for (Course course : student.getCourses()) {
+				  String varId = createUniqueVariableId(student.get_UID(), course.getId(), semesterId);
+				  CourseSemester courseSemester = new CourseSemester(course, newSemester);
+				  try {
+					  if (GRBVARS_GLOBAL.get(varId).get(GRB.DoubleAttr.X) == 1) {
+						  StudentCourseSemester scs = new StudentCourseSemester(student, courseSemester);
+						  SCS.add(scs);
+					  }
+				  } catch (GRBException e) {
+					  // TODO Auto-generated catch block
+					  e.printStackTrace();
+				  }
+			  }
+			 // System.out.println("");
+		  }
+	  }
+	  int counter = 0;
+	  for (CourseSemester cs : course_semester) {
+		  if (cs.get_semester().getId() == semester) {
+			  for (StudentCourseSemester studentcoursesemester : SCS) {
+				  if ((cs.get_semester().equals(studentcoursesemester.get_course_semester().get_semester())) && (cs.get_course().equals(studentcoursesemester.get_course_semester().get_course()))) {
+					  counter++;
+				  }
+			  }
+			  int percentage = (counter/population)*100;
+			  results.put(cs.get_course(), percentage);
+		  }
+	  }
+	  return results;
+  }
 }

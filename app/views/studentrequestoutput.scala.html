@@ -1,5 +1,5 @@
 @(courseSemesterOptions: List[CourseSemester],
-fullSchedule: Map[Semester, List[Course]])
+fullSchedule: Map[Semester, Set[Course]])
 @import helper._
 
 @main {
@@ -51,7 +51,7 @@ fullSchedule: Map[Semester, List[Course]])
 							<tr>
 								<td>@semester.getSemesterName()</td>
 							</tr>
-							@for((course, index) <- courses.zipWithIndex) {
+							@for(course <- courses) {
 								<tr>
 									<td>@course.getCourseName()</td>
 								</tr>

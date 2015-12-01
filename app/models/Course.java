@@ -9,6 +9,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 @Entity
 @Table(name="Course")
 public class Course {
@@ -91,5 +94,27 @@ public class Course {
   */
   public int getId() {
 	  return id;
+  }
+  
+  @Override
+  public int hashCode() {
+      return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
+          // if deriving: appendSuper(super.hashCode()).
+          append(id).
+          toHashCode();
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+	  if (obj == null) {
+		  return false;
+	  }
+     if (!(obj instanceof Person))
+          return false;
+      if (obj == this)
+          return true;
+
+      Person rhs = (Person) obj;
+      return id == rhs.get_UID();
   }
 }
