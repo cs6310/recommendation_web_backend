@@ -5,6 +5,7 @@
 GET     /                   		controllers.Application.index()
 POST    /                   		controllers.Application.authenticate()
 GET		/student/semester			controllers.Application.showPreStudentForm()
+GET		/student			        controllers.Application.showPreStudentForm()
 POST	/student/semester			controllers.Application.processPreStudentForm()
 GET		/student/semester/request	controllers.Application.showStudentForm()
 POST	/student/semester/request	controllers.Application.processStudentForm()
@@ -17,4 +18,3 @@ GET		/logout						controllers.Application.logout()
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 GET     /webjars/*file              controllers.WebJarAssets.at(file)
-
